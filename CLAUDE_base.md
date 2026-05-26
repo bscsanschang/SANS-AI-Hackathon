@@ -144,6 +144,18 @@ Rules:
 
 ---
 
+## Bootstrap Exception
+
+The only unlogged setup actions permitted are:
+
+- creating `./analysis/`, `./exports/`, `./logs/`, and `./reports/`
+- creating `./analysis/run_logged.sh`
+- sourcing `./analysis/run_logged.sh`
+
+After the wrapper is created and sourced, every forensic command must use `run_logged`.
+
+This exception does not apply to evidence inspection, evidence mounting, parsing, hashing, searching, extraction, timeline generation, or reporting.
+
 ## Required Logged Command Wrapper
 
 Before running forensic commands, create and source a logging wrapper.
@@ -234,6 +246,193 @@ run_logged "Search filenames for evil" bash -lc 'fls -r -o 2048 /mnt/ewf_dc01/ew
 Raw, unlogged forensic commands are protocol violations.
 
 ---
+
+## Claim Validation Rules
+
+Before asserting any conclusion, classify the statement:
+
+### Direct Observation
+Artifact explicitly shows the fact.
+Examples:
+- File exists
+- Process executed
+- Event ID recorded
+- Registry key present
+
+### Supported Inference
+Conclusion derived from one or more artifacts using accepted DFIR reasoning.
+Must include:
+- why the inference is reasonable
+- what evidence supports it
+- what alternative explanations exist
+
+### Speculative Inference
+Plausible but unproven interpretation.
+Must:
+- be labeled Hypothesis
+- include validation steps
+- never appear in Executive Summary as fact
+
+---
+## Escalation
+Never escalate:
+artifact → attribution
+artifact → intent
+artifact → compromise
+artifact → attacker capability
+
+without explicit supporting evidence.
+
+## Alternative Explanation Requirement
+
+For every major finding:
+
+- Identify at least one alternative explanation.
+- Explain why the preferred interpretation is stronger.
+- State what evidence would disprove the current hypothesis.
+
+## Evidence Weighting
+
+High-weight evidence:
+- process creation logs
+- PowerShell transcripts
+- memory artifacts
+- recovered malware
+- registry persistence artifacts
+
+Medium-weight evidence:
+- Prefetch
+- Amcache
+- SRUM
+- Jump Lists
+
+Low-weight evidence:
+- Shimcache alone
+- filename matches
+- orphaned LNKs
+- single IOC hit
+
+## Restricted Conclusions
+
+Do not use these terms unless evidence threshold is met:
+
+"Compromised host"
+Requires:
+- malware
+- credential theft
+- persistence
+- attacker execution
+OR
+multiple corroborating attacker artifacts
+
+"Pass-the-hash"
+Requires:
+- NTLM auth pattern
+PLUS
+supporting lateral movement or credential-theft evidence
+
+"Exfiltration confirmed"
+Requires:
+- outbound transfer evidence
+OR
+remote possession evidence
+
+"Attacker"
+Use "operator" or "activity" unless malicious intent is established.
+
+## Contradictory Evidence Handling
+
+For every finding:
+- identify supporting evidence
+- identify missing evidence
+- identify contradictory evidence if present
+
+Absence of expected artifacts must be noted.
+
+Do not suppress contradictory artifacts to preserve narrative consistency.
+
+## Mandatory Unknowns Section
+
+Every report must include:
+- what is known
+- what is unknown
+- what cannot be determined from available evidence
+- what evidence would resolve uncertainty
+
+## Narrative Discipline
+
+Do not optimize for narrative coherence.
+
+Independent artifacts may:
+- conflict
+- be incomplete
+- reflect unrelated activity
+
+Prefer fragmented truth over coherent but unsupported attack stories.
+
+## Reporting Language Standards
+
+Use:
+- "consistent with"
+- "suggests"
+- "supported by"
+- "corroborated by"
+- "cannot exclude"
+
+Avoid:
+- "proves" unless directly observed
+- "definitely"
+- "clearly"
+- "obviously"
+- "must have"
+
+## Confidence Downgrade Conditions
+
+Downgrade confidence when:
+- evidence is indirect
+- only one artifact supports a claim
+- artifacts are user-generated
+- timestamps conflict
+- interpretation depends on assumptions
+- alternative explanations remain plausible
+
+## Finding Completeness Checklist
+
+Before finalizing a finding, verify:
+- who
+- what
+- when
+- where
+- how
+- supporting artifact
+- corroborating artifact
+- alternative explanation
+- limitation
+- confidence level
+
+## Sensitive Data Handling
+
+Do not reproduce plaintext passwords, API keys, private keys, tokens, or full secrets in the final report unless explicitly required.
+
+Use redaction by default:
+
+- show username or account name,
+- show file path,
+- show hash of the credential file,
+- show only partial secret if necessary, e.g. first 2 and last 2 characters,
+- store full secret values only in a restricted appendix or export file.
+
+## Claim Support Matrix
+Final report must include a Claim Support Matrix for all major findings.
+
+| Finding ID | Claim | Claim Type | Confidence | Supporting Evidence | Tool Output Path | Alternative Explanation | Limitation |
+|-----------|-------|------------|------------|---------------------|------------------|--------------------------|------------|
+
+Claim Type must be one of:
+
+- Direct Observation
+- Supported Inference
+- Speculative Inference
 
 ## SIFT Protocol Execution Standard
 
