@@ -229,21 +229,24 @@ EOF
 source ./analysis/run_logged.sh
 ```
 
-All forensic commands must be executed through `run_logged`, or through an equivalent wrapper that writes the same ledger fields.
+All forensic commands must be executed through `run_logged`.
 
-Commands using pipes, redirection, globbing, shell variables, or heredocs must be wrapped with `bash -lc`.
-
-Examples:
-
-```bash
-run_logged "Verify E01 image integrity" ewfverify base-dc-cdrive.E01
-
-run_logged "Inspect partition table" mmls /mnt/ewf_dc01/ewf1
-
-run_logged "Search filenames for evil" bash -lc 'fls -r -o 2048 /mnt/ewf_dc01/ewf1 | grep -i evil | tee ./exports/filename_search_evil.txt'
-```
+Commands using pipes, redirection, globbing, shell variables, or heredocs must be wrapped with `bash -o pipefail -lc` so pipeline failures are not hidden.
 
 Raw, unlogged forensic commands are protocol violations.
+
+## Evidence Path Precision
+
+Final reports must use exact paths for evidence, parser output, exported files, logs, and command output.
+
+Do not use:
+- `...`
+- `./exports/...`
+- `./logs/...`
+- shortened paths
+- placeholder paths
+
+If a path is too long for a table, move the full path to an appendix and reference the appendix row ID.
 
 ---
 
@@ -276,10 +279,20 @@ Must:
 ---
 ## Escalation
 Never escalate:
-artifact → attribution
-artifact → intent
-artifact → compromise
-artifact → attacker capability
+
+- artifact -> attribution
+- artifact -> intent
+- artifact -> compromise
+- artifact -> attacker capability
+- artifact -> exfiltration
+- artifact -> credential theft
+- artifact -> pass-the-hash
+- artifact -> persistence
+- artifact -> insider threat
+- authentication event -> host compromise
+- staged file -> confirmed outbound transfer
+- AV detection -> independently confirmed malware family
+- script block content -> confirmed successful payload execution
 
 without explicit supporting evidence.
 
@@ -434,6 +447,92 @@ Claim Type must be one of:
 - Supported Inference
 - Speculative Inference
 
+## Mount Tracking
+
+Maintain `./analysis/mounts.csv` with:
+
+| Evidence ID | EWF Mount Path | Filesystem Mount Path | Offset | Mount Options | Mounted UTC | Unmounted UTC | Status |
+|-------------|----------------|-----------------------|--------|---------------|-------------|---------------|--------|
+
+Rules:
+- Mount read-only.
+- Record every mount and unmount.
+- Verify mounted paths are read-only.
+- Unmount evidence before final report when analysis is complete.
+- If unmount fails, document the reason and the command output.
+
+## Final Artifact Manifest
+
+Before reporting, create `./reports/artifact_manifest.csv` with:
+
+| Path | Type | Size Bytes | SHA256 | Created UTC | Purpose |
+|------|------|------------|--------|-------------|---------|
+
+Include reports, parsed CSVs, IOC registers, timelines, scripts, and command logs.
+
+## AV Detection Interpretation
+
+An antivirus log is direct evidence that the AV product detected, classified, quarantined, or deleted an object.
+
+It is not by itself direct proof of malware family or execution.
+
+Use:
+- "McAfee detected X as Y"
+- "AV-classified trojan"
+- "probable malware based on repeated AV detections and context"
+
+Avoid:
+- "confirmed trojan"
+- "confirmed malware family"
+
+unless the file was recovered and independently analyzed.
+
+## PowerShell Script Block Interpretation
+
+PowerShell EID 4104 is direct evidence that script block content was logged.
+
+Do not claim payload success, beacon check-in, or second-stage execution unless corroborated by:
+- process creation,
+- network telemetry,
+- memory evidence,
+- module/pipeline execution artifacts,
+- recovered payload output,
+- or other independent artifacts.
+
+## Hash Column Data Integrity
+
+Any table column labeled MD5, SHA1, SHA-1, SHA256, or SHA-256 must contain only:
+
+- a valid hash of the correct length and character set,
+- `NOT_COMPUTED`,
+- `NOT_AVAILABLE`,
+- `DELETED_NOT_RECOVERED`,
+- or `SEE_APPENDIX`.
+
+Never place comments, descriptions, interpretations, or evidence notes in a hash column.
+
+If explanatory text is needed, create a separate `Notes` column.
+
+If multiple files are listed, each file must receive its own row. Do not combine multiple files into one row when any hash column is present.
+
+If a hash is visually shortened for readability, the column header must say `SHA-256 (truncated)`, and the report must point to the full hash source, such as `./analysis/ioc_register.csv` or an appendix.
+
+## On-Disk Component Table Requirements
+
+For every on-disk component table, use this schema:
+
+| File Path | Size Bytes | MD5 | SHA-256 | Evidence Source | Notes |
+|----------|------------|-----|---------|-----------------|-------|
+
+Rules:
+
+- one file per row,
+- full path preferred,
+- full SHA-256 preferred,
+- comments go only in `Notes`,
+- deleted AV-only files must be listed separately from residual on-disk files,
+- if a file was deleted and not recovered, do not invent SHA-256.
+
 ## SIFT Protocol Execution Standard
 
 ### Phase 0 — Workspace and Safety
@@ -469,6 +568,13 @@ For every memory image:
 - Run `python3 /opt/volatility3-2.20.0/vol.py -f <image> windows.info`.
 - Do not use `/usr/local/bin/vol.py`.
 - Confirm symbols are available or use `--offline` to fail fast.
+
+Create `./analysis/evidence_inventory.csv` with:
+
+| Evidence ID | Source Path | Evidence Type | Size Bytes | MD5 | SHA1/SHA256 if available | Verification Status | Notes |
+|-------------|-------------|---------------|------------|-----|--------------------------|---------------------|-------|
+
+Every finding must reference an Evidence ID.
 
 ---
 
@@ -523,7 +629,31 @@ For every suspicious artifact:
 
 ---
 
-### Phase 4.5 — Command Ledger Audit
+### Phase 5 — Claim and Hallucination Check
+
+Before the final report:
+
+1. Break every major finding into atomic claims.
+2. For each claim, classify it as:
+   - Direct Observation
+   - Supported Inference
+   - Speculative Inference
+3. Confirm every claim has:
+   - supporting evidence,
+   - tool output path,
+   - confidence level,
+   - limitation or caveat.
+4. Remove or rewrite any claim that is unsupported.
+5. Downgrade any claim that is only partially supported.
+6. Label unresolved but plausible claims as Hypothesis and include the next validation step.
+7. Do not include unsupported claims in the Executive Summary.
+8. Do not convert absence of evidence into evidence of absence unless the searched scope is documented.
+
+Final reporting may include Confirmed, Corroborated, Probable, Hypothesis, and Rejected findings, but each must be clearly labeled.
+
+---
+
+### Phase 6 — Command Ledger Audit
 
 Before writing the final report:
 
@@ -603,7 +733,7 @@ PY'
 
 ---
 
-### Phase 5 — Reporting
+### Phase 7 — Reporting
 
 Final report must include:
 
@@ -627,6 +757,8 @@ Each finding must include:
 - Timestamp UTC
 - Analyst interpretation
 - Limitation or caveat
+
+Never mention 'find evil' in the report, instead call 'Digital forensic analysis of {evidence file}
 
 The Reproducibility Appendix must include:
 
