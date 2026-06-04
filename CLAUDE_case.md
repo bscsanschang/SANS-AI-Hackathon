@@ -6,8 +6,8 @@ This file provides case-specific guidance for Claude Code when working in this c
 
 | Field | Value |
 |------|-------|
-| Case ID | CASE-001 |
-| Case Name | TEST-IR |
+| Case ID | CASE-002 |
+| Case Name | Test3 |
 | Case Type | Unknown / blind DFIR triage |
 | Client / Organization | Not provided |
 | Incident Declared | Not provided |
@@ -31,7 +31,7 @@ The analyst must not infer incident facts from the filename, directory name, cou
 
 | Evidence ID | File Path | Type | Suspected System | Notes |
 |------------|----------|------|------------------|-------|
-| EVID-001 | `/cases/<case_name>/base-dc-cdrive.E01` | E01 disk image | Unknown until verified | Read-only evidence |
+| EVID-001 | `/cases/<case_name>/base-wkstn-01-c-drive.E01` | E01 disk image | Unknown until verified | Read-only evidence |
 
 # Add more rows as needed:
 
