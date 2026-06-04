@@ -144,92 +144,9 @@ Rules:
 
 ---
 
-## Bootstrap Exception
-
-The only unlogged setup actions permitted are:
-
-- creating `./analysis/`, `./exports/`, `./logs/`, and `./reports/`
-- creating `./analysis/run_logged.sh`
-- sourcing `./analysis/run_logged.sh`
-
-After the wrapper is created and sourced, every forensic command must use `run_logged`.
-
-This exception does not apply to evidence inspection, evidence mounting, parsing, hashing, searching, extraction, timeline generation, or reporting.
-
 ## Required Logged Command Wrapper
 
-Before running forensic commands, create and source a logging wrapper.
-
-```bash
-mkdir -p ./analysis ./exports ./logs ./reports
-
-cat > ./analysis/run_logged.sh <<'EOF'
-#!/usr/bin/env bash
-set -u
-
-mkdir -p ./logs
-
-LEDGER="./logs/command_ledger.csv"
-
-if [ ! -f "$LEDGER" ]; then
-  python3 - <<'PY'
-import csv
-
-with open("./logs/command_ledger.csv", "w", newline="") as f:
-    writer = csv.writer(f)
-    writer.writerow([
-        "UTC Time",
-        "Working Directory",
-        "Command",
-        "Stdout Path",
-        "Stderr Path",
-        "Exit Code",
-        "Notes",
-    ])
-PY
-fi
-
-run_logged() {
-  local note="$1"
-  shift
-
-  local ts
-  local id
-  local cwd
-  local stdout_path
-  local stderr_path
-  local cmd
-  local exit_code
-
-  ts="$(date -u +"%Y-%m-%dT%H:%M:%SZ")"
-  id="$(date -u +"%Y%m%dT%H%M%SZ")_${RANDOM}"
-  cwd="$PWD"
-  stdout_path="./logs/${id}_stdout.log"
-  stderr_path="./logs/${id}_stderr.log"
-  cmd="$*"
-
-  "$@" >"$stdout_path" 2>"$stderr_path"
-  exit_code=$?
-
-  python3 - "$LEDGER" "$ts" "$cwd" "$cmd" "$stdout_path" "$stderr_path" "$exit_code" "$note" <<'PY'
-import csv
-import sys
-
-ledger, ts, cwd, cmd, stdout_path, stderr_path, exit_code, note = sys.argv[1:]
-
-with open(ledger, "a", newline="") as f:
-    writer = csv.writer(f)
-    writer.writerow([ts, cwd, cmd, stdout_path, stderr_path, exit_code, note])
-PY
-
-  return "$exit_code"
-}
-EOF
-
-source ./analysis/run_logged.sh
-```
-
-All forensic commands must be executed through `run_logged`.
+All forensic commands must be executed through `/home/sansforensics/.claude/scripts/run_logged.sh`.
 
 Commands using pipes, redirection, globbing, shell variables, or heredocs must be wrapped with `bash -o pipefail -lc` so pipeline failures are not hidden.
 
@@ -548,7 +465,7 @@ Rules:
 - Do not copy, edit, delete, or create files inside mounted evidence volumes.
 - Use UTC for all timestamps.
 - Save every command, stdout, stderr, and exit code to `./logs/`.
-- Source `./analysis/run_logged.sh` before running forensic commands.
+- Source `/home/sansforensics//.claude/scripts/run_logged.sh` before running forensic commands.
 
 ---
 
@@ -673,67 +590,13 @@ Before writing the final report:
    - failed commands
    - rerun commands
    - unresolved failures
-6. If the ledger is missing, incomplete, or inconsistent, fix the ledger before producing the final report.
-
-Use this audit command:
-
-```bash
-run_logged "Audit command ledger completeness" bash -lc 'python3 - <<'"'"'PY'"'"'
-import csv
-import os
-import sys
-
-ledger = "./logs/command_ledger.csv"
-
-if not os.path.exists(ledger):
-    print("ERROR: command ledger missing")
-    sys.exit(1)
-
-with open(ledger, newline="") as f:
-    rows = list(csv.DictReader(f))
-
-required = [
-    "UTC Time",
-    "Working Directory",
-    "Command",
-    "Stdout Path",
-    "Stderr Path",
-    "Exit Code",
-    "Notes",
-]
-
-if not rows:
-    print("ERROR: command ledger has no command rows")
-    sys.exit(1)
-
-errors = []
-
-for idx, row in enumerate(rows, start=2):
-    for field in required:
-        if field not in row or row[field] == "":
-            errors.append(f"Row {idx}: missing {field}")
-
-    for path_field in ["Stdout Path", "Stderr Path"]:
-        path = row.get(path_field, "")
-        if path and not os.path.exists(path):
-            errors.append(f"Row {idx}: missing referenced {path_field}: {path}")
-
-if errors:
-    print("ERROR: command ledger audit failed")
-    for error in errors:
-        print(error)
-    sys.exit(1)
-
-failed = [row for row in rows if row.get("Exit Code") not in ("0", 0)]
-print("Command ledger audit passed.")
-print(f"Total commands: {len(rows)}")
-print(f"Failed commands: {len(failed)}")
-PY'
-```
+6. Use `/home/sansforensics/.claude/scripts/audit_command_ledger.py` to audit `./logs/command_ledger.csv`
 
 ---
 
 ### Phase 7 — Reporting
+
+Use `/home/sansforensics/.claude/scripts/generate_pdf_report.py` to generate the final PDF report
 
 Final report must include:
 
@@ -776,6 +639,12 @@ The final report is invalid unless:
 - The report includes the command ledger summary.
 - The report includes the command ledger location.
 - The report includes the Confidence Level Definitions section.
+- The PDF has no visual mistakes such as:
+    - Tables broken between pages
+    - Tables or text being written outside the margin
+    - The PDF does not pass `./.claude/scripts/pdf_visual_check.py`
+
+If the final report is deemed to be invalid, fix what is invalid.
 
 The final Markdown report and any generated PDF report must include this section at the bottom:
 
