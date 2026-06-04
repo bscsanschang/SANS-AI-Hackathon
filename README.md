@@ -25,7 +25,11 @@
   
       sudo mount -o ro,loop,noatime,offset=$((OFFSET*512)) /mnt/ewf_evidence/ewf1 /mnt/evidence
 
-### Step 4 (execution):
+### Step 4 (set up case CLAUDE.md)
+
+    - Modify CLAUDE.md in case directory to reflect anything specific to this case such as the name of the evidence file, name of the case, etc.
+
+### Step 5 (execution):
 
     - Open Claude from case directory
     - Enter command such as:
