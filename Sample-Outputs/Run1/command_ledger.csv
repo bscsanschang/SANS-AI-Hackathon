@@ -1,0 +1,450 @@
+UTC Time,Working Directory,Command,Stdout Path,Stderr Path,Exit Code,Notes
+2026-06-04T15:57:23Z,/home/sansforensics/Desktop/cases/Test1,ls -la /cases/Test1/,./logs/20260604T155723Z_21090_stdout.log,./logs/20260604T155723Z_21090_stderr.log,0,List case directory contents
+2026-06-04T15:57:45Z,/home/sansforensics/Desktop/cases/Test1,ls -la /cases/Test1/,./logs/20260604T155745Z_10008_stdout.log,./logs/20260604T155745Z_10008_stderr.log,0,list case directory
+2026-06-04T15:58:00Z,/home/sansforensics/Desktop/cases/Test1,ewfinfo /cases/Test1/base-wkstn-01-c-drive.E01,./logs/20260604T155800Z_8185_stdout.log,./logs/20260604T155800Z_8185_stderr.log,0,ewfinfo E01 image
+2026-06-04T15:58:01Z,/home/sansforensics/Desktop/cases/Test1,ls -la /mnt/,./logs/20260604T155801Z_32361_stdout.log,./logs/20260604T155801Z_32361_stderr.log,1,check mount points
+2026-06-04T15:58:13Z,/home/sansforensics/Desktop/cases/Test1,mount,./logs/20260604T155813Z_12399_stdout.log,./logs/20260604T155813Z_12399_stderr.log,0,check if image mounted
+2026-06-04T15:58:14Z,/home/sansforensics/Desktop/cases/Test1,sudo ls -la /mnt/wkstn01/,./logs/20260604T155814Z_2997_stdout.log,./logs/20260604T155814Z_2997_stderr.log,0,list wkstn01 mount point
+2026-06-04T15:58:23Z,/home/sansforensics/Desktop/cases/Test1,bash -o pipefail -lc mount | grep -E 'wkstn01|ewf_wkstn',./logs/20260604T155823Z_490_stdout.log,./logs/20260604T155823Z_490_stderr.log,0,grep mount status
+2026-06-04T15:58:29Z,/home/sansforensics/Desktop/cases/Test1,bash -o pipefail -lc sudo mmls /mnt/ewf_wkstn01/ewf1,./logs/20260604T155829Z_14483_stdout.log,./logs/20260604T155829Z_14483_stderr.log,1,mmls partition layout
+2026-06-04T15:58:44Z,/home/sansforensics/Desktop/cases/Test1,bash -o pipefail -lc sudo mmls /mnt/ewf_wkstn01/ewf1,./logs/20260604T155844Z_14867_stdout.log,./logs/20260604T155844Z_14867_stderr.log,1,mmls partition layout
+2026-06-04T15:58:54Z,/home/sansforensics/Desktop/cases/Test1,bash -o pipefail -lc ls -la /mnt/ewf_wkstn01/ewf1 2>&1; sudo -n mmls /mnt/ewf_wkstn01/ewf1 2>&1; echo EXIT=$?,./logs/20260604T155854Z_12953_stdout.log,./logs/20260604T155854Z_12953_stderr.log,0,diagnose mmls failure
+2026-06-04T15:59:23Z,/home/sansforensics/Desktop/cases/Test1,sudo -n true,./logs/20260604T155923Z_28613_stdout.log,./logs/20260604T155923Z_28613_stderr.log,0,test sudo passwordless
+2026-06-04T15:59:24Z,/home/sansforensics/Desktop/cases/Test1,sudo mmls /mnt/ewf_wkstn01/ewf1,./logs/20260604T155924Z_8333_stdout.log,./logs/20260604T155924Z_8333_stderr.log,1,mmls retry direct
+2026-06-04T15:59:41Z,/home/sansforensics/Desktop/cases/Test1,sudo fsstat -i raw -f ntfs -o 2048 /mnt/ewf_wkstn01/ewf1,./logs/20260604T155941Z_5156_stdout.log,./logs/20260604T155941Z_5156_stderr.log,1,fsstat on partition
+2026-06-04T15:59:49Z,/home/sansforensics/Desktop/cases/Test1,bash -o pipefail -lc sudo mmls /mnt/ewf_wkstn01/ewf1; echo EXIT=$?; sudo file /mnt/ewf_wkstn01/ewf1 2>&1; sudo head -c 512 /mnt/ewf_wkstn01/ewf1 | xxd | head -20,./logs/20260604T155949Z_10100_stdout.log,./logs/20260604T155949Z_10100_stderr.log,0,investigate mmls failure
+2026-06-04T16:00:01Z,/home/sansforensics/Desktop/cases/Test1,sudo fsstat -f ntfs /mnt/ewf_wkstn01/ewf1,./logs/20260604T160001Z_14782_stdout.log,./logs/20260604T160001Z_14782_stderr.log,0,fsstat on ewf1 no offset
+2026-06-04T16:00:25Z,/home/sansforensics/Desktop/cases/Test1,sudo ls -la /mnt/wkstn01/Users/,./logs/20260604T160025Z_13247_stdout.log,./logs/20260604T160025Z_13247_stderr.log,0,list users dir
+2026-06-04T16:00:26Z,/home/sansforensics/Desktop/cases/Test1,sudo ls -la /mnt/wkstn01/Quarantine/,./logs/20260604T160026Z_1996_stdout.log,./logs/20260604T160026Z_1996_stderr.log,0,list Quarantine dir
+2026-06-04T16:00:27Z,/home/sansforensics/Desktop/cases/Test1,sudo ls -la /mnt/wkstn01/ProgramData/,./logs/20260604T160027Z_31307_stdout.log,./logs/20260604T160027Z_31307_stderr.log,0,list ProgramData top
+2026-06-04T16:00:28Z,/home/sansforensics/Desktop/cases/Test1,sudo ls -la /mnt/wkstn01/Windows/System32/config/,./logs/20260604T160028Z_4249_stdout.log,./logs/20260604T160028Z_4249_stderr.log,0,Windows version info from SOFTWARE hive list
+2026-06-04T16:00:47Z,/home/sansforensics/Desktop/cases/Test1,"bash -o pipefail -lc sudo mkdir -p /cases/Test1/exports/hives && sudo cp -a /mnt/wkstn01/Windows/System32/config/{SYSTEM,SOFTWARE,SECURITY,SAM,DEFAULT} /cases/Test1/exports/hives/ && sudo cp -a /mnt/wkstn01/Windows/System32/config/{SYSTEM,SOFTWARE,SECURITY,SAM,DEFAULT}.LOG* /cases/Test1/exports/hives/ 2>/dev/null; sudo chown -R sansforensics:sansforensics /cases/Test1/exports/hives && ls -la /cases/Test1/exports/hives/",./logs/20260604T160047Z_5233_stdout.log,./logs/20260604T160047Z_5233_stderr.log,0,copy registry hives to exports
+2026-06-04T16:00:50Z,/home/sansforensics/Desktop/cases/Test1,"bash -o pipefail -lc for u in administrator.shieldbase cbarton-a rsydow-a mhill Administrator Administrator.BASE-WKSTN-01; do echo === $u ===; sudo ls -la /mnt/wkstn01/Users/$u/NTUSER.DAT 2>&1; sudo ls -la ""/mnt/wkstn01/Users/$u/AppData/Local/Microsoft/Windows/UsrClass.dat"" 2>&1; done",./logs/20260604T160050Z_18541_stdout.log,./logs/20260604T160050Z_18541_stderr.log,0,list user profiles for NTUSER
+2026-06-04T16:00:51Z,/home/sansforensics/Desktop/cases/Test1,sudo ls -la /mnt/wkstn01/Windows/System32/winevt/Logs/,./logs/20260604T160051Z_23783_stdout.log,./logs/20260604T160051Z_23783_stderr.log,0,list event logs
+2026-06-04T16:01:08Z,/home/sansforensics/Desktop/cases/Test1,bash -o pipefail -lc sudo mkdir -p /cases/Test1/exports/evtx && sudo cp -a /mnt/wkstn01/Windows/System32/winevt/Logs/. /cases/Test1/exports/evtx/ && sudo chown -R sansforensics:sansforensics /cases/Test1/exports/evtx && du -sh /cases/Test1/exports/evtx/ && ls /cases/Test1/exports/evtx/ | wc -l,./logs/20260604T160108Z_11719_stdout.log,./logs/20260604T160108Z_11719_stderr.log,0,copy event logs to exports
+2026-06-04T16:01:12Z,/home/sansforensics/Desktop/cases/Test1,bash -o pipefail -lc sudo mkdir -p /cases/Test1/exports/userhives; for u in administrator.shieldbase cbarton-a rsydow-a mhill Administrator.BASE-WKSTN-01; do sudo mkdir -p /cases/Test1/exports/userhives/$u; sudo cp -a /mnt/wkstn01/Users/$u/NTUSER.DAT /cases/Test1/exports/userhives/$u/ 2>&1; sudo cp -a /mnt/wkstn01/Users/$u/AppData/Local/Microsoft/Windows/UsrClass.dat /cases/Test1/exports/userhives/$u/ 2>&1; done; sudo chown -R sansforensics:sansforensics /cases/Test1/exports/userhives && ls -la /cases/Test1/exports/userhives/,./logs/20260604T160112Z_1750_stdout.log,./logs/20260604T160112Z_1750_stderr.log,0,copy user hives
+2026-06-04T16:01:15Z,/home/sansforensics/Desktop/cases/Test1,bash -o pipefail -lc sudo mkdir -p /cases/Test1/exports/amcache /cases/Test1/exports/prefetch; sudo cp -a /mnt/wkstn01/Windows/AppCompat/Programs/Amcache.hve* /cases/Test1/exports/amcache/ 2>/dev/null; sudo cp -a /mnt/wkstn01/Windows/Prefetch/. /cases/Test1/exports/prefetch/ 2>/dev/null; sudo chown -R sansforensics:sansforensics /cases/Test1/exports/amcache /cases/Test1/exports/prefetch; ls -la /cases/Test1/exports/amcache/; echo ---; ls /cases/Test1/exports/prefetch/ | wc -l,./logs/20260604T160115Z_11774_stdout.log,./logs/20260604T160115Z_11774_stderr.log,0,copy amcache and prefetch
+2026-06-04T16:01:32Z,/home/sansforensics/Desktop/cases/Test1,bash -o pipefail -lc sudo find /mnt/wkstn01/Windows/appcompat -maxdepth 3 -iname 'Amcache*' 2>/dev/null,./logs/20260604T160132Z_7161_stdout.log,./logs/20260604T160132Z_7161_stderr.log,0,find Amcache
+2026-06-04T16:01:34Z,/home/sansforensics/Desktop/cases/Test1,bash -o pipefail -lc sudo ls -la /mnt/wkstn01/Windows/System32/sru/ 2>&1; echo ---; sudo ls -la /mnt/wkstn01/Windows/Tasks 2>&1 | head -30,./logs/20260604T160134Z_16902_stdout.log,./logs/20260604T160134Z_16902_stderr.log,0,find SRUM and shim
+2026-06-04T16:01:50Z,/home/sansforensics/Desktop/cases/Test1,bash -o pipefail -lc sudo mkdir -p /cases/Test1/exports/amcache /cases/Test1/exports/srum /cases/Test1/exports/tasks; sudo cp -a /mnt/wkstn01/Windows/appcompat/Programs/Amcache.hve* /cases/Test1/exports/amcache/; sudo cp -a /mnt/wkstn01/Windows/System32/sru/. /cases/Test1/exports/srum/; sudo cp -ar /mnt/wkstn01/Windows/System32/Tasks /cases/Test1/exports/tasks/; sudo chown -R sansforensics:sansforensics /cases/Test1/exports/amcache /cases/Test1/exports/srum /cases/Test1/exports/tasks; ls -la /cases/Test1/exports/amcache/ | head; echo ---; ls -la /cases/Test1/exports/srum/; echo ---; ls /cases/Test1/exports/tasks/Tasks/ 2>&1 | head,./logs/20260604T160150Z_23649_stdout.log,./logs/20260604T160150Z_23649_stderr.log,0,copy amcache srum tasks
+2026-06-04T16:01:52Z,/home/sansforensics/Desktop/cases/Test1,bash -o pipefail -lc sudo icat -f ntfs /mnt/ewf_wkstn01/ewf1 0 > /cases/Test1/exports/MFT && sudo chown sansforensics:sansforensics /cases/Test1/exports/MFT && ls -la /cases/Test1/exports/MFT,./logs/20260604T160152Z_29698_stdout.log,./logs/20260604T160152Z_29698_stderr.log,0,extract MFT with icat
+2026-06-04T16:01:56Z,/home/sansforensics/Desktop/cases/Test1,bash -o pipefail -lc sudo icat -f ntfs /mnt/ewf_wkstn01/ewf1 -r $(sudo fls -f ntfs /mnt/ewf_wkstn01/ewf1 -d $(sudo fls -f ntfs /mnt/ewf_wkstn01/ewf1 -d 5 2>/dev/null | awk -F'[: ]' '/\$Extend/ {print $3; exit}') 2>/dev/null | awk -F'[: ]' '/\$UsnJrnl/{print $3; exit}'):\$J > /cases/Test1/exports/UsnJrnl_J 2>/cases/Test1/logs/usnjrnl_err.log; sudo chown sansforensics:sansforensics /cases/Test1/exports/UsnJrnl_J 2>/dev/null; ls -la /cases/Test1/exports/UsnJrnl_J 2>&1,./logs/20260604T160156Z_29939_stdout.log,./logs/20260604T160156Z_29939_stderr.log,0,extract UsnJrnl
+2026-06-04T16:02:16Z,/home/sansforensics/Desktop/cases/Test1,bash -o pipefail -lc sudo fls -f ntfs /mnt/ewf_wkstn01/ewf1 11,./logs/20260604T160216Z_7024_stdout.log,./logs/20260604T160216Z_7024_stderr.log,0,find UsnJrnl inode
+2026-06-04T16:02:17Z,/home/sansforensics/Desktop/cases/Test1,bash -o pipefail -lc dotnet /opt/zimmermantools/PECmd.dll -d /cases/Test1/exports/prefetch --csv /cases/Test1/analysis --csvf prefetch.csv 2>&1 | tail -40,./logs/20260604T160217Z_16111_stdout.log,./logs/20260604T160217Z_16111_stderr.log,1,start PECmd parsing
+2026-06-04T16:00:02Z,/home/sansforensics/Desktop/cases/Test1,sudo ewfverify /cases/Test1/base-wkstn-01-c-drive.E01,./logs/20260604T160002Z_17456_stdout.log,./logs/20260604T160002Z_17456_stderr.log,0,ewfverify background
+2026-06-04T16:02:34Z,/home/sansforensics/Desktop/cases/Test1,bash -o pipefail -lc sudo icat -f ntfs /mnt/ewf_wkstn01/ewf1 55815-128-87 > /cases/Test1/exports/UsnJrnl_J && sudo chown sansforensics:sansforensics /cases/Test1/exports/UsnJrnl_J && ls -la /cases/Test1/exports/UsnJrnl_J,./logs/20260604T160234Z_10820_stdout.log,./logs/20260604T160234Z_10820_stderr.log,0,extract UsnJrnl direct
+2026-06-04T16:02:49Z,/home/sansforensics/Desktop/cases/Test1,dotnet /opt/zimmermantools/PECmd.dll -d /cases/Test1/exports/prefetch --csv /cases/Test1/analysis --csvf prefetch.csv,./logs/20260604T160249Z_21296_stdout.log,./logs/20260604T160249Z_21296_stderr.log,1,PECmd direct
+2026-06-04T16:03:04Z,/home/sansforensics/Desktop/cases/Test1,dotnet --info,./logs/20260604T160304Z_13773_stdout.log,./logs/20260604T160304Z_13773_stderr.log,0,dotnet test
+2026-06-04T16:03:18Z,/home/sansforensics/Desktop/cases/Test1,bash -o pipefail -lc which dotnet; ls -la /usr/bin/dotnet 2>&1; /usr/bin/dotnet --info 2>&1 | head -10,./logs/20260604T160318Z_15246_stdout.log,./logs/20260604T160318Z_15246_stderr.log,0,which dotnet
+2026-06-04T16:03:30Z,/home/sansforensics/Desktop/cases/Test1,bash -o pipefail -lc ls /opt/zimmermantools/ | head -30; echo ---; ls /opt/zimmermantools/*.dll 2>/dev/null | head,./logs/20260604T160330Z_3539_stdout.log,./logs/20260604T160330Z_3539_stderr.log,0,list ez tools
+2026-06-04T16:03:40Z,/home/sansforensics/Desktop/cases/Test1,bash -o pipefail -lc find /opt/zimmermantools -iname 'PECmd*' 2>/dev/null; echo ---; ls /opt/zimmermantools/EvtxeCmd/ | head; echo ---; ls /opt/zimmermantools/RECmd | head,./logs/20260604T160340Z_4800_stdout.log,./logs/20260604T160340Z_4800_stderr.log,0,find PECmd
+2026-06-04T16:03:56Z,/home/sansforensics/Desktop/cases/Test1,bash -o pipefail -lc dotnet /opt/zimmermantools/AmcacheParser.dll 2>&1 | head -10,./logs/20260604T160356Z_11138_stdout.log,./logs/20260604T160356Z_11138_stderr.log,0,test AmcacheParser
+2026-06-04T16:04:09Z,/home/sansforensics/Desktop/cases/Test1,dotnet /opt/zimmermantools/AmcacheParser.dll -f /cases/Test1/exports/amcache/Amcache.hve --csv /cases/Test1/analysis --csvf amcache.csv -i,./logs/20260604T160409Z_17335_stdout.log,./logs/20260604T160409Z_17335_stderr.log,0,AmcacheParser
+2026-06-04T16:04:11Z,/home/sansforensics/Desktop/cases/Test1,dotnet /opt/zimmermantools/AppCompatCacheParser.dll -f /cases/Test1/exports/hives/SYSTEM --csv /cases/Test1/analysis --csvf appcompatcache.csv -c 1,./logs/20260604T160411Z_8997_stdout.log,./logs/20260604T160411Z_8997_stderr.log,0,AppCompatCacheParser
+2026-06-04T16:04:14Z,/home/sansforensics/Desktop/cases/Test1,dotnet /opt/zimmermantools/MFTECmd.dll -f /cases/Test1/exports/UsnJrnl_J --csv /cases/Test1/analysis --csvf usnjrnl.csv,./logs/20260604T160414Z_32297_stdout.log,./logs/20260604T160414Z_32297_stderr.log,0,MFTECmd UsnJrnl
+2026-06-04T16:04:12Z,/home/sansforensics/Desktop/cases/Test1,dotnet /opt/zimmermantools/MFTECmd.dll -f /cases/Test1/exports/MFT --csv /cases/Test1/analysis --csvf mft.csv,./logs/20260604T160412Z_12182_stdout.log,./logs/20260604T160412Z_12182_stderr.log,0,MFTECmd MFT
+2026-06-04T16:04:23Z,/home/sansforensics/Desktop/cases/Test1,bash -o pipefail -lc ls -la /cases/Test1/analysis/ | head,./logs/20260604T160423Z_5474_stdout.log,./logs/20260604T160423Z_5474_stderr.log,0,list amcache parse output
+2026-06-04T16:04:27Z,/home/sansforensics/Desktop/cases/Test1,ls -la /cases/Test1/analysis/,./logs/20260604T160427Z_27075_stdout.log,./logs/20260604T160427Z_27075_stderr.log,0,list analysis files
+2026-06-04T16:04:22Z,/home/sansforensics/Desktop/cases/Test1,bash -o pipefail -lc dotnet /opt/zimmermantools/RECmd/RECmd.dll --bn /opt/zimmermantools/RECmd/BatchExamples/Kroll_Batch.reb -d /cases/Test1/exports/hives --csv /cases/Test1/analysis/recmd 2>&1 | tail -5,./logs/20260604T160422Z_30150_stdout.log,./logs/20260604T160422Z_30150_stderr.log,0,RECmd BatchExample SOFTWARE
+2026-06-04T16:04:41Z,/home/sansforensics/Desktop/cases/Test1,cat /cases/Test1/logs/20260604T160411Z_8997_stdout.log,./logs/20260604T160441Z_23971_stdout.log,./logs/20260604T160441Z_23971_stderr.log,0,check appcompat shimcache
+2026-06-04T16:04:44Z,/home/sansforensics/Desktop/cases/Test1,cat /tmp/claude-1000/-cases-Test1/4398f556-f334-4a3b-bf73-9dbc3f3e8708/tasks/bcnekouhx.output,./logs/20260604T160444Z_23430_stdout.log,./logs/20260604T160444Z_23430_stderr.log,0,EvtxECmd status
+2026-06-04T16:04:45Z,/home/sansforensics/Desktop/cases/Test1,cat /tmp/claude-1000/-cases-Test1/4398f556-f334-4a3b-bf73-9dbc3f3e8708/tasks/btndp5v4i.output,./logs/20260604T160445Z_2156_stdout.log,./logs/20260604T160445Z_2156_stderr.log,0,RECmd status
+2026-06-04T16:04:52Z,/home/sansforensics/Desktop/cases/Test1,dotnet /opt/zimmermantools/AppCompatCacheParser.dll -f /cases/Test1/exports/hives/SYSTEM --csv /cases/Test1/analysis --csvf appcompatcache.csv,./logs/20260604T160452Z_12088_stdout.log,./logs/20260604T160452Z_12088_stderr.log,0,AppCompatCacheParser fixed
+2026-06-04T16:04:54Z,/home/sansforensics/Desktop/cases/Test1,bash -o pipefail -lc ls -la /cases/Test1/analysis/recmd/ 2>&1 | head -40,./logs/20260604T160454Z_9242_stdout.log,./logs/20260604T160454Z_9242_stderr.log,0,Check RECmd output
+2026-06-04T16:04:56Z,/home/sansforensics/Desktop/cases/Test1,bash -o pipefail -lc find /mnt/wkstn01/Users -maxdepth 7 -path '*AppData/Roaming/Microsoft/Windows/Recent/AutomaticDestinations*' 2>/dev/null | head,./logs/20260604T160456Z_27606_stdout.log,./logs/20260604T160456Z_27606_stderr.log,0,JLECmd Administrator.shieldbase
+2026-06-04T16:05:12Z,/home/sansforensics/Desktop/cases/Test1,bash -o pipefail -lc dotnet /opt/zimmermantools/SBECmd.dll -d /cases/Test1/exports/userhives --csv /cases/Test1/analysis/shellbags 2>&1 | tail -5,./logs/20260604T160512Z_13081_stdout.log,./logs/20260604T160512Z_13081_stderr.log,0,SBECmd shellbags
+2026-06-04T16:05:13Z,/home/sansforensics/Desktop/cases/Test1,bash -o pipefail -lc sudo find /mnt/wkstn01/Users -name 'ActivitiesCache.db' 2>/dev/null,./logs/20260604T160513Z_649_stdout.log,./logs/20260604T160513Z_649_stderr.log,0,find ActivitiesCache
+2026-06-04T16:05:31Z,/home/sansforensics/Desktop/cases/Test1,bash -o pipefail -lc head -3 /cases/Test1/analysis/amcache_ProgramEntries.csv; echo ---; wc -l /cases/Test1/analysis/amcache_*.csv,./logs/20260604T160531Z_25573_stdout.log,./logs/20260604T160531Z_25573_stderr.log,0,head amcache programs
+2026-06-04T16:05:32Z,/home/sansforensics/Desktop/cases/Test1,bash -o pipefail -lc head -3 /cases/Test1/analysis/appcompatcache.csv; wc -l /cases/Test1/analysis/appcompatcache.csv,./logs/20260604T160532Z_30779_stdout.log,./logs/20260604T160532Z_30779_stderr.log,0,head appcompatcache
+2026-06-04T16:05:34Z,/home/sansforensics/Desktop/cases/Test1,"bash -o pipefail -lc awk -F',' 'NR>1{print $5}' /cases/Test1/analysis/evtx_all.csv | sort | uniq -c | sort -rn | head -30",./logs/20260604T160534Z_10194_stdout.log,./logs/20260604T160534Z_10194_stderr.log,0,evtx providers list
+2026-06-04T16:05:35Z,/home/sansforensics/Desktop/cases/Test1,bash -o pipefail -lc head -1 /cases/Test1/analysis/evtx_all.csv,./logs/20260604T160535Z_1196_stdout.log,./logs/20260604T160535Z_1196_stderr.log,0,evtx top eventids
+2026-06-04T16:05:57Z,/home/sansforensics/Desktop/cases/Test1,"bash -o pipefail -lc python3 -c ""import csv; from collections import Counter; c=Counter(); 
+[c.update([r['Provider']]) for r in csv.DictReader(open('/cases/Test1/analysis/evtx_all.csv', encoding='utf-8', errors='replace'))]; print('\n'.join('%6d %s' % (v,k) for k,v in c.most_common(30)))""",./logs/20260604T160557Z_25533_stdout.log,./logs/20260604T160557Z_25533_stderr.log,0,evtx top providers
+2026-06-04T16:06:03Z,/home/sansforensics/Desktop/cases/Test1,"bash -o pipefail -lc python3 -c ""import csv; from collections import Counter; c=Counter(); 
+[c.update([(r['Channel'], r['EventId'])]) for r in csv.DictReader(open('/cases/Test1/analysis/evtx_all.csv', encoding='utf-8', errors='replace'))]; print('\n'.join('%6d %s' % (v,k) for k,v in c.most_common(40)))""",./logs/20260604T160603Z_30731_stdout.log,./logs/20260604T160603Z_30731_stderr.log,0,evtx top eventids
+2026-06-04T16:06:26Z,/home/sansforensics/Desktop/cases/Test1,"bash -o pipefail -lc python3 -c ""
+import csv
+from collections import Counter
+c=Counter()
+for r in csv.DictReader(open('/cases/Test1/analysis/evtx_all.csv', encoding='utf-8', errors='replace')):
+    if r['Channel']=='Security':
+        c[r['EventId']]+=1
+for k,v in c.most_common(30): print('%6d EID %s' % (v,k))
+""",./logs/20260604T160626Z_32248_stdout.log,./logs/20260604T160626Z_32248_stderr.log,0,evtx security events
+2026-06-04T16:06:33Z,/home/sansforensics/Desktop/cases/Test1,"bash -o pipefail -lc python3 -c ""
+import csv
+for r in csv.DictReader(open('/cases/Test1/analysis/evtx_all.csv', encoding='utf-8', errors='replace')):
+    if 'McShield' in (r.get('SourceFile','') or '') or 'McShield' in (r.get('Channel','') or ''):
+        print('|'.join([r.get('TimeCreated',''), r.get('EventId',''), r.get('Level',''), r.get('Provider',''), (r.get('PayloadData1','') or '')[:200], (r.get('PayloadData2','') or '')[:200]]))
+"" | head -200",./logs/20260604T160633Z_13084_stdout.log,./logs/20260604T160633Z_13084_stderr.log,0,McShield events
+2026-06-04T16:06:41Z,/home/sansforensics/Desktop/cases/Test1,"bash -o pipefail -lc python3 -c ""
+import csv
+c=0
+for r in csv.DictReader(open('/cases/Test1/analysis/evtx_all.csv', encoding='utf-8', errors='replace')):
+    if r['Channel']=='Microsoft-Windows-PowerShell/Operational' and r['EventId']=='4104':
+        c+=1
+        if c<=20:
+            print('|'.join([r.get('TimeCreated',''), r.get('UserName',''), (r.get('PayloadData1','') or '')[:200], (r.get('Payload','') or '')[:300]]))
+print('TOTAL 4104:', c)
+""",./logs/20260604T160641Z_20089_stdout.log,./logs/20260604T160641Z_20089_stderr.log,0,PowerShell scriptblock 4104
+2026-06-04T16:07:10Z,/home/sansforensics/Desktop/cases/Test1,"bash -o pipefail -lc python3 -c ""
+import csv
+seen=set()
+for r in csv.DictReader(open('/cases/Test1/analysis/evtx_all.csv', encoding='utf-8', errors='replace')):
+    ch=r.get('Channel','')
+    if ch and 'Security' in ch:
+        seen.add(ch)
+print(seen)
+""",./logs/20260604T160710Z_5202_stdout.log,./logs/20260604T160710Z_5202_stderr.log,0,Security log channel check
+2026-06-04T16:07:19Z,/home/sansforensics/Desktop/cases/Test1,bash -o pipefail -lc ls -la /cases/Test1/exports/evtx/Security.evtx 2>&1,./logs/20260604T160719Z_6912_stdout.log,./logs/20260604T160719Z_6912_stderr.log,0,Sec log file check
+2026-06-04T16:07:19Z,/home/sansforensics/Desktop/cases/Test1,"bash -o pipefail -lc python3 -c ""
+import csv
+mn=mx=None
+for r in csv.DictReader(open('/cases/Test1/analysis/evtx_all.csv', encoding='utf-8', errors='replace')):
+    t=r.get('TimeCreated','')
+    if t:
+        if mn is None or t<mn: mn=t
+        if mx is None or t>mx: mx=t
+print('MIN:', mn)
+print('MAX:', mx)
+""",./logs/20260604T160719Z_30477_stdout.log,./logs/20260604T160719Z_30477_stderr.log,0,TimeRange of events
+2026-06-04T16:07:44Z,/home/sansforensics/Desktop/cases/Test1,"bash -o pipefail -lc python3 -c ""
+import csv
+seen=set()
+for r in csv.DictReader(open('/cases/Test1/analysis/evtx_all.csv', encoding='utf-8', errors='replace')):
+    seen.add(r.get('Channel',''))
+print(len(seen),'channels')
+for c in sorted(seen):
+    print(repr(c))
+"" | head -80",./logs/20260604T160744Z_1223_stdout.log,./logs/20260604T160744Z_1223_stderr.log,0,All distinct channels
+2026-06-04T16:08:13Z,/home/sansforensics/Desktop/cases/Test1,bash -o pipefail -lc dotnet /opt/zimmermantools/EvtxeCmd/EvtxECmd.dll -f '/cases/Test1/exports/evtx/McShield.evtx' --csv /cases/Test1/analysis --csvf evtx_mcshield.csv 2>&1 | tail -10,./logs/20260604T160813Z_32039_stdout.log,./logs/20260604T160813Z_32039_stderr.log,0,EvtxECmd McShield
+2026-06-04T16:08:09Z,/home/sansforensics/Desktop/cases/Test1,bash -o pipefail -lc dotnet /opt/zimmermantools/EvtxeCmd/EvtxECmd.dll -f /cases/Test1/exports/evtx/System.evtx --csv /cases/Test1/analysis --csvf evtx_system.csv 2>&1 | tail -10,./logs/20260604T160809Z_26170_stdout.log,./logs/20260604T160809Z_26170_stderr.log,0,EvtxECmd System
+2026-06-04T16:08:29Z,/home/sansforensics/Desktop/cases/Test1,"bash -o pipefail -lc python3 -c ""
+import csv
+from collections import Counter
+c=Counter()
+for r in csv.DictReader(open('/cases/Test1/analysis/evtx_system.csv', encoding='utf-8', errors='replace')):
+    c[r['EventId']]+=1
+for k,v in c.most_common(30): print('%6d EID %s' % (v,k))
+""",./logs/20260604T160829Z_24580_stdout.log,./logs/20260604T160829Z_24580_stderr.log,0,system top EID
+2026-06-04T16:08:11Z,/home/sansforensics/Desktop/cases/Test1,bash -o pipefail -lc dotnet /opt/zimmermantools/EvtxeCmd/EvtxECmd.dll -f /cases/Test1/exports/evtx/Application.evtx --csv /cases/Test1/analysis --csvf evtx_application.csv 2>&1 | tail -10,./logs/20260604T160812Z_5339_stdout.log,./logs/20260604T160812Z_5339_stderr.log,0,EvtxECmd Application
+2026-06-04T16:08:31Z,/home/sansforensics/Desktop/cases/Test1,"bash -o pipefail -lc python3 -c ""
+import csv
+for r in csv.DictReader(open('/cases/Test1/analysis/evtx_system.csv', encoding='utf-8', errors='replace')):
+    if r['EventId']=='7045':
+        print('|'.join([r['TimeCreated'],r.get('UserName',''),(r.get('PayloadData1','') or '')[:300],(r.get('PayloadData2','') or '')[:200]]))
+"" | head -100",./logs/20260604T160831Z_1680_stdout.log,./logs/20260604T160831Z_1680_stderr.log,0,service installs 7045
+2026-06-04T16:04:19Z,/home/sansforensics/Desktop/cases/Test1,bash -o pipefail -lc dotnet /opt/zimmermantools/EvtxeCmd/EvtxECmd.dll -d /cases/Test1/exports/evtx --csv /cases/Test1/analysis --csvf evtx_all.csv 2>&1 | tail -5,./logs/20260604T160419Z_26046_stdout.log,./logs/20260604T160419Z_26046_stderr.log,0,EvtxECmd all
+2026-06-04T16:08:58Z,/home/sansforensics/Desktop/cases/Test1,"bash -o pipefail -lc python3 -c ""
+import csv
+c=0
+for r in csv.DictReader(open('/cases/Test1/analysis/evtx_all.csv', encoding='utf-8', errors='replace')):
+    if r['Channel']=='Microsoft-Windows-RemoteDesktopServices-RdpCoreTS/Operational' and r['EventId'] in ('131','98','65','66','67','68','108','258'):
+        c+=1
+        if c<=30:
+            print('|'.join([r['TimeCreated'],r['EventId'],(r.get('PayloadData1','') or '')[:200],(r.get('PayloadData2','') or '')[:200]]))
+print('TOTAL RDP:',c)
+""",./logs/20260604T160858Z_20921_stdout.log,./logs/20260604T160858Z_20921_stderr.log,0,RDP logon events
+2026-06-04T16:08:08Z,/home/sansforensics/Desktop/cases/Test1,bash -o pipefail -lc dotnet /opt/zimmermantools/EvtxeCmd/EvtxECmd.dll -f /cases/Test1/exports/evtx/Security.evtx --csv /cases/Test1/analysis --csvf evtx_security.csv 2>&1 | tail -10,./logs/20260604T160808Z_27825_stdout.log,./logs/20260604T160808Z_27825_stderr.log,0,EvtxECmd Security
+2026-06-04T16:09:14Z,/home/sansforensics/Desktop/cases/Test1,"bash -o pipefail -lc python3 -c ""
+import csv
+n=0
+for r in csv.DictReader(open('/cases/Test1/analysis/evtx_all.csv', encoding='utf-8', errors='replace')):
+    if r['Channel']=='Microsoft-Windows-WinRM/Operational' and r['EventId']=='145':
+        if n<10:
+            print('|'.join([r['TimeCreated'],r.get('UserName',''),(r.get('PayloadData1','') or '')[:300]]))
+        n+=1
+print('WinRM 145 total:',n)
+""",./logs/20260604T160914Z_24412_stdout.log,./logs/20260604T160914Z_24412_stderr.log,0,WinRM 145 sample
+2026-06-04T16:09:28Z,/home/sansforensics/Desktop/cases/Test1,"bash -o pipefail -lc python3 -c ""
+import csv
+from collections import Counter
+c=Counter()
+samples={}
+for r in csv.DictReader(open('/cases/Test1/analysis/evtx_all.csv', encoding='utf-8', errors='replace')):
+    if r['Channel']=='Microsoft-Windows-TaskScheduler/Operational' and r['EventId'] in ('106','141','140','200','201','100','119','125','129'):
+        key=(r['EventId'],(r.get('PayloadData1','') or '')[:120])
+        c[key]+=1
+print('Top TaskScheduler activity:')
+for k,v in c.most_common(40): print(v, k)
+""",./logs/20260604T160928Z_31974_stdout.log,./logs/20260604T160928Z_31974_stderr.log,0,ScheduledTask 106/200
+2026-06-04T16:10:03Z,/home/sansforensics/Desktop/cases/Test1,"bash -o pipefail -lc python3 -c ""
+import csv
+from collections import Counter
+c=Counter()
+for r in csv.DictReader(open('/cases/Test1/analysis/evtx_security.csv', encoding='utf-8', errors='replace')):
+    c[r['EventId']]+=1
+for k,v in c.most_common(40): print('%7d EID %s' % (v,k))
+print('--- TOTAL ---')
+print(sum(c.values()))
+""",./logs/20260604T161003Z_24965_stdout.log,./logs/20260604T161003Z_24965_stderr.log,0,Security EID top
+2026-06-04T16:10:08Z,/home/sansforensics/Desktop/cases/Test1,"bash -o pipefail -lc python3 -c ""
+import csv
+from collections import Counter
+c=Counter()
+samples=[]
+for r in csv.DictReader(open('/cases/Test1/analysis/evtx_security.csv', encoding='utf-8', errors='replace')):
+    if r['EventId']=='4624':
+        # PayloadData fields hold logon details
+        p1=(r.get('PayloadData1','') or '')
+        p2=(r.get('PayloadData2','') or '')
+        ltype='?'
+        for f in [p1,p2, r.get('PayloadData3','') or '', r.get('PayloadData4','') or '', r.get('PayloadData5','') or '', r.get('PayloadData6','') or '']:
+            if 'LogonType:' in f or 'Logon Type:' in f:
+                ltype=f.split(':')[-1].strip()[:5]
+        c[ltype]+=1
+        if len(samples)<5:
+            samples.append((r['TimeCreated'], p1[:200], p2[:200]))
+print('Logon types:')
+for k,v in c.most_common(): print(v, k)
+print('Samples:')
+for s in samples: print(s)
+""",./logs/20260604T161008Z_6267_stdout.log,./logs/20260604T161008Z_6267_stderr.log,0,logons 4624 by type
+2026-06-04T16:10:12Z,/home/sansforensics/Desktop/cases/Test1,"bash -o pipefail -lc python3 -c ""
+import csv
+from collections import Counter
+c=Counter()
+n=0
+for r in csv.DictReader(open('/cases/Test1/analysis/evtx_all.csv', encoding='utf-8', errors='replace')):
+    if r['Channel']=='Microsoft-Windows-WinRM/Operational' and r['EventId']=='145':
+        n+=1
+        # check payload for dest
+        for k in ('PayloadData1','PayloadData2','PayloadData3','PayloadData4','PayloadData5','PayloadData6','Payload'):
+            v=r.get(k,'') or ''
+            if v and v.strip():
+                # extract any URL
+                if 'http' in v or 'wsman' in v or '://' in v or 'Address' in v:
+                    c[v[:200]]+=1
+                    break
+print('WinRM145 examined',n,'unique payload prefixes:')
+for k,v in c.most_common(15): print(v, k)
+""",./logs/20260604T161012Z_3310_stdout.log,./logs/20260604T161012Z_3310_stderr.log,0,WinRM 145 dest
+2026-06-04T16:10:51Z,/home/sansforensics/Desktop/cases/Test1,"bash -o pipefail -lc python3 -c ""
+import csv
+for r in csv.DictReader(open('/cases/Test1/analysis/evtx_security.csv', encoding='utf-8', errors='replace')):
+    if r['EventId']=='4732':
+        print('TIME:',r['TimeCreated'])
+        print('UN:',r.get('UserName',''))
+        for k in ('PayloadData1','PayloadData2','PayloadData3','PayloadData4','PayloadData5','PayloadData6'):
+            print('',k,':',(r.get(k,'') or '')[:200])
+        print('PAYLOAD:',(r.get('Payload','') or '')[:600])
+""",./logs/20260604T161051Z_32723_stdout.log,./logs/20260604T161051Z_32723_stderr.log,0,EID 4732 group add
+2026-06-04T16:10:55Z,/home/sansforensics/Desktop/cases/Test1,"bash -o pipefail -lc python3 -c ""
+import csv,re
+from collections import Counter
+c=Counter()
+for r in csv.DictReader(open('/cases/Test1/analysis/evtx_security.csv', encoding='utf-8', errors='replace')):
+    if r['EventId']=='4624':
+        all_payload = '|'.join([(r.get(k,'') or '') for k in ('PayloadData1','PayloadData2','PayloadData3','PayloadData4','PayloadData5','PayloadData6')])
+        m=re.search(r'LogonType[: ]+(\d+)', all_payload)
+        t=m.group(1) if m else '?'
+        c[t]+=1
+print('Logon types:')
+for k,v in c.most_common(): print(v, 'Type',k)
+""",./logs/20260604T161055Z_1820_stdout.log,./logs/20260604T161055Z_1820_stderr.log,0,logon by type
+2026-06-04T16:10:59Z,/home/sansforensics/Desktop/cases/Test1,"bash -o pipefail -lc python3 -c ""
+import csv
+for r in csv.DictReader(open('/cases/Test1/analysis/evtx_security.csv', encoding='utf-8', errors='replace')):
+    if r['EventId']=='4688':
+        line=r['TimeCreated']+' | UN:'+r.get('UserName','')[:30]+' | '
+        for k in ('PayloadData1','PayloadData2','PayloadData3','PayloadData4','PayloadData5','PayloadData6'):
+            v=(r.get(k,'') or '')
+            if v: line+=v[:180]+' | '
+        print(line)
+"" | head -40",./logs/20260604T161059Z_20410_stdout.log,./logs/20260604T161059Z_20410_stderr.log,1,Process creation 4688
+2026-06-04T16:11:38Z,/home/sansforensics/Desktop/cases/Test1,"bash -o pipefail -lc python3 -c ""
+import csv,re
+seen=set()
+for r in csv.DictReader(open('/cases/Test1/analysis/evtx_security.csv', encoding='utf-8', errors='replace')):
+    if r['EventId']=='4624':
+        ap='|'.join([(r.get(k,'') or '') for k in ('PayloadData1','PayloadData2','PayloadData3','PayloadData4','PayloadData5','PayloadData6')])
+        m=re.search(r'LogonType[: ]+(\d+)', ap)
+        t=m.group(1) if m else '?'
+        if t in ('2','7','10','11'):
+            u=re.search(r'(?:TargetUserName|Target User)[: =]+([^|]+)', ap)
+            uname=u.group(1).strip()[:40] if u else 'unknown'
+            ip=re.search(r'(?:IpAddress|Workstation|Workstation Name|IpAddress)[: ]+([^|]+)', ap)
+            ipn=ip.group(1).strip()[:40] if ip else ''
+            key=(t, uname, ipn, r['TimeCreated'][:10])
+            if key not in seen:
+                seen.add(key)
+                print('Type',t,'|',uname,'|',ipn,'|',r['TimeCreated'])
+print('UNIQUE:',len(seen))
+"" | head -60",./logs/20260604T161138Z_621_stdout.log,./logs/20260604T161138Z_621_stderr.log,0,interactive logons Type 2 and 10
+2026-06-04T16:11:43Z,/home/sansforensics/Desktop/cases/Test1,"bash -o pipefail -lc python3 -c ""
+import csv
+# Look in evtx_security for 4624 to find SID->name mappings
+seen={}
+for r in csv.DictReader(open('/cases/Test1/analysis/evtx_security.csv', encoding='utf-8', errors='replace')):
+    payload=r.get('Payload','') or ''
+    # The Payload JSON has TargetUserName and TargetUserSid
+    import re
+    sm=re.search(r'""TargetUserSid"",""#text"":""([^""]+)""', payload)
+    nm=re.search(r'""TargetUserName"",""#text"":""([^""]+)""', payload)
+    if sm and nm:
+        sid=sm.group(1); name=nm.group(1)
+        if sid.startswith('S-1-5-21-3445421715') and sid not in seen:
+            seen[sid]=name
+for k,v in sorted(seen.items()): print(k, '=', v)
+""",./logs/20260604T161143Z_22859_stdout.log,./logs/20260604T161143Z_22859_stderr.log,2,user SID to name mapping
+2026-06-04T16:05:09Z,/home/sansforensics/Desktop/cases/Test1,bash -o pipefail -lc dotnet /opt/zimmermantools/JLECmd.dll -d /mnt/wkstn01/Users --csv /cases/Test1/analysis --csvf jumplists.csv -q 2>&1 | tail -5,./logs/20260604T160509Z_1775_stdout.log,./logs/20260604T160509Z_1775_stderr.log,0,JLECmd parse
+2026-06-04T16:12:28Z,/home/sansforensics/Desktop/cases/Test1,python3 /cases/Test1/analysis/scripts/sec_analysis.py logons,./logs/20260604T161228Z_27793_stdout.log,./logs/20260604T161228Z_27793_stderr.log,0,logons by user
+2026-06-04T16:12:44Z,/home/sansforensics/Desktop/cases/Test1,python3 /cases/Test1/analysis/scripts/sec_analysis.py failed,./logs/20260604T161244Z_25455_stdout.log,./logs/20260604T161244Z_25455_stderr.log,0,failed logons
+2026-06-04T16:12:48Z,/home/sansforensics/Desktop/cases/Test1,python3 /cases/Test1/analysis/scripts/sec_analysis.py explicit,./logs/20260604T161248Z_22023_stdout.log,./logs/20260604T161248Z_22023_stderr.log,0,explicit creds
+2026-06-04T16:12:52Z,/home/sansforensics/Desktop/cases/Test1,python3 /cases/Test1/analysis/scripts/sec_analysis.py share_access,./logs/20260604T161252Z_4620_stdout.log,./logs/20260604T161252Z_4620_stderr.log,0,share access
+2026-06-04T16:12:56Z,/home/sansforensics/Desktop/cases/Test1,python3 /cases/Test1/analysis/scripts/sec_analysis.py services,./logs/20260604T161256Z_28156_stdout.log,./logs/20260604T161256Z_28156_stderr.log,0,service installs
+2026-06-04T16:12:59Z,/home/sansforensics/Desktop/cases/Test1,python3 /cases/Test1/analysis/scripts/sec_analysis.py user_account,./logs/20260604T161259Z_9526_stdout.log,./logs/20260604T161259Z_9526_stderr.log,0,user account events
+2026-06-04T16:13:49Z,/home/sansforensics/Desktop/cases/Test1,"bash -o pipefail -lc python3 -c ""
+import csv,re
+for r in csv.DictReader(open('/cases/Test1/analysis/evtx_security.csv', encoding='utf-8', errors='replace')):
+    payload=r.get('Payload','') or ''
+    m=re.search(r'\""TargetUserSid\"",\""#text\"":\""(S-1-5-21-3445421715-2530590580-3149308974-1212)\""', payload)
+    if m:
+        # extract TargetUserName
+        n=re.search(r'\""TargetUserName\"",\""#text\"":\""([^\""]+)\""', payload)
+        if n:
+            print(r['TimeCreated'][:19], r['EventId'], 'name=', n.group(1))
+            break
+""",./logs/20260604T161349Z_6812_stdout.log,./logs/20260604T161349Z_6812_stderr.log,0,look up sid 1212
+2026-06-04T16:13:53Z,/home/sansforensics/Desktop/cases/Test1,bash -o pipefail -lc dotnet /opt/zimmermantools/RECmd/RECmd.dll -f /cases/Test1/exports/hives/SOFTWARE --kn 'ProfileList' --recover 2>&1 | head -80,./logs/20260604T161353Z_27520_stdout.log,./logs/20260604T161353Z_27520_stderr.log,0,search SOFTWARE for ProfileList
+2026-06-04T16:14:13Z,/home/sansforensics/Desktop/cases/Test1,bash -o pipefail -lc find /cases/Test1/analysis/recmd -iname '*ProfileList*' 2>/dev/null; ls /cases/Test1/analysis/recmd/20260604160422/ | head -50,./logs/20260604T161413Z_27488_stdout.log,./logs/20260604T161413Z_27488_stderr.log,0,Use Kroll output for ProfileList
+2026-06-04T16:14:22Z,/home/sansforensics/Desktop/cases/Test1,bash -o pipefail -lc ls /cases/Test1/analysis/recmd/20260604160422/20260604160422_ProfileList_/,./logs/20260604T161422Z_25886_stdout.log,./logs/20260604T161422Z_25886_stderr.log,0,list ProfileList
+2026-06-04T16:14:33Z,/home/sansforensics/Desktop/cases/Test1,bash -o pipefail -lc grep -E 'ProfileImagePath|^.*-1212|S-1-5-21' /cases/Test1/analysis/recmd/20260604160422/20260604160422_ProfileList_/SOFTWARE.csv 2>/dev/null | head -30,./logs/20260604T161433Z_32420_stdout.log,./logs/20260604T161433Z_32420_stderr.log,0,ProfileList content
+2026-06-04T16:14:49Z,/home/sansforensics/Desktop/cases/Test1,bash -o pipefail -lc grep -E 'S-1-5-21-3445421715-2530590580-3149308974-1212' /cases/Test1/analysis/evtx_*.csv 2>/dev/null | head -10,./logs/20260604T161449Z_12162_stdout.log,./logs/20260604T161449Z_12162_stderr.log,0,search SID 1212 in events
+2026-06-04T16:14:51Z,/home/sansforensics/Desktop/cases/Test1,bash -o pipefail -lc head -2 /cases/Test1/analysis/recmd/20260604160422/20260604160422_UserAccounts_/SAM.csv 2>/dev/null; ls /cases/Test1/analysis/recmd/20260604160422/20260604160422_UserAccounts_/ 2>/dev/null,./logs/20260604T161451Z_18481_stdout.log,./logs/20260604T161451Z_18481_stderr.log,0,SAM accounts list
+2026-06-04T16:15:32Z,/home/sansforensics/Desktop/cases/Test1,"bash -o pipefail -lc python3 -c ""
+import csv
+keywords=['mimikatz','psexec','procdump','wce','quarks','ntdsutil','vssadmin','netcat','nc.exe','plink','chisel','cobalt','beacon','hollow','meterpreter','empire','bloodhound','sharphound','rubeus','seatbelt','sliver','mythic','impacket','adfind','adexplorer','PowerSploit','PowerView','Invoke-','reg.exe','schtasks','xcopy','7z','wget','curl','certutil','bitsadmin','msbuild','installutil','regsvr32','rundll32','mshta','wsadmin','wsmprovhost']
+files=[
+  ('/cases/Test1/analysis/amcache_UnassociatedFileEntries.csv','UNASSOC'),
+  ('/cases/Test1/analysis/amcache_AssociatedFileEntries.csv','ASSOC'),
+  ('/cases/Test1/analysis/amcache_ProgramEntries.csv','PROG'),
+  ('/cases/Test1/analysis/amcache_ShortCuts.csv','LNKS'),
+]
+for fp,lbl in files:
+  for r in csv.DictReader(open(fp, encoding='utf-8', errors='replace')):
+    row_str = '|'.join(r.values()).lower()
+    for k in keywords:
+      if k.lower() in row_str:
+        print(lbl,'|',k,'|',r)
+        break
+"" | head -80",./logs/20260604T161532Z_13617_stdout.log,./logs/20260604T161532Z_13617_stderr.log,0,search amcache for suspicious
+2026-06-04T16:16:04Z,/home/sansforensics/Desktop/cases/Test1,python3 /cases/Test1/analysis/scripts/amcache_sweep.py,./logs/20260604T161604Z_18935_stdout.log,./logs/20260604T161604Z_18935_stderr.log,0,amcache sweep
+2026-06-04T16:16:28Z,/home/sansforensics/Desktop/cases/Test1,bash -o pipefail -lc sudo find /mnt/wkstn01/Users -maxdepth 1 -iname '*spsql*' 2>/dev/null; echo ---; sudo ls -la /mnt/wkstn01/Users/ | grep -i spsql,./logs/20260604T161628Z_27055_stdout.log,./logs/20260604T161628Z_27055_stderr.log,1,list spsql profile
+2026-06-04T16:16:40Z,/home/sansforensics/Desktop/cases/Test1,sudo ls -la /mnt/wkstn01/ProgramData/perfmon-k/,./logs/20260604T161640Z_1574_stdout.log,./logs/20260604T161640Z_1574_stderr.log,0,perfmon-k dir listing
+2026-06-04T16:16:42Z,/home/sansforensics/Desktop/cases/Test1,bash -o pipefail -lc sudo find /mnt/wkstn01 -iname 'perfmon-k*' 2>/dev/null | head -20,./logs/20260604T161642Z_3751_stdout.log,./logs/20260604T161642Z_3751_stderr.log,0,find perfmon files
+2026-06-04T16:17:36Z,/home/sansforensics/Desktop/cases/Test1,bash -o pipefail -lc sudo cat /mnt/wkstn01/ProgramData/perfmon-k/install.log,./logs/20260604T161736Z_21830_stdout.log,./logs/20260604T161736Z_21830_stderr.log,0,read perfmon-k install.log
+2026-06-04T16:17:38Z,/home/sansforensics/Desktop/cases/Test1,bash -o pipefail -lc sudo cat /mnt/wkstn01/ProgramData/perfmon-k/web.dt; echo ---OPT---; sudo cat /mnt/wkstn01/ProgramData/perfmon-k/opt.dat | xxd | head -10,./logs/20260604T161738Z_14872_stdout.log,./logs/20260604T161738Z_14872_stderr.log,0,perfmon-k web.dt opt.dat
+2026-06-04T16:17:39Z,/home/sansforensics/Desktop/cases/Test1,"bash -o pipefail -lc for f in /mnt/wkstn01/ProgramData/perfmon-k/*; do sudo sha256sum ""$f""; done",./logs/20260604T161739Z_10110_stdout.log,./logs/20260604T161739Z_10110_stderr.log,0,hash perfmon-k files
+2026-06-04T16:17:41Z,/home/sansforensics/Desktop/cases/Test1,bash -o pipefail -lc grep -i spsql /cases/Test1/analysis/recmd/20260604160422/20260604160422_ProfileList_/SOFTWARE.csv 2>/dev/null; grep -i spsql /cases/Test1/analysis/recmd/20260604160422/*/*.csv 2>/dev/null | head,./logs/20260604T161741Z_19116_stdout.log,./logs/20260604T161741Z_19116_stderr.log,1,find spsql in profilelist
+2026-06-04T16:18:07Z,/home/sansforensics/Desktop/cases/Test1,bash -o pipefail -lc grep -ri 'perfmon-k\|BlazingTools\|Perfect Keylogger' /cases/Test1/analysis/recmd/ 2>/dev/null | head -20,./logs/20260604T161807Z_15145_stdout.log,./logs/20260604T161807Z_15145_stderr.log,1,search Run keys for perfmon
+2026-06-04T16:18:23Z,/home/sansforensics/Desktop/cases/Test1,"bash -o pipefail -lc for f in /cases/Test1/analysis/recmd/20260604160422/*/*.csv /cases/Test1/analysis/recmd/*.csv; do if grep -li 'perfmon-k' ""$f"" 2>/dev/null; then echo ""==== $f ====""; grep -i 'perfmon-k' ""$f"" 2>/dev/null | head -5; fi; done",./logs/20260604T161823Z_29355_stdout.log,./logs/20260604T161823Z_29355_stderr.log,0,search recmd files for perfmon
+2026-06-04T16:18:34Z,/home/sansforensics/Desktop/cases/Test1,bash -o pipefail -lc grep -i 'perfmon-k\|BlazingTools\|spsql' /cases/Test1/analysis/recmd/20260604160422/20260604160422_RECmd_Batch_Kroll_Batch_Output.csv 2>/dev/null | head -40,./logs/20260604T161834Z_15565_stdout.log,./logs/20260604T161834Z_15565_stderr.log,2,broader grep recmd batch
+2026-06-04T16:18:46Z,/home/sansforensics/Desktop/cases/Test1,bash -o pipefail -lc find /cases/Test1/analysis/recmd -type f | head -30; echo ---; ls /cases/Test1/analysis/recmd/20260604160422/,./logs/20260604T161846Z_28320_stdout.log,./logs/20260604T161846Z_28320_stderr.log,0,list recmd files structure
+2026-06-04T16:19:01Z,/home/sansforensics/Desktop/cases/Test1,bash -o pipefail -lc grep -i 'spsql\|perfmon-k\|k\.exe\|rarsfx' /cases/Test1/analysis/appcompatcache.csv 2>/dev/null,./logs/20260604T161901Z_20600_stdout.log,./logs/20260604T161901Z_20600_stderr.log,0,shimcache search
+2026-06-04T16:19:03Z,/home/sansforensics/Desktop/cases/Test1,bash -o pipefail -lc grep -i 'perfmon-k\|BlazingTools' /cases/Test1/analysis/recmd/20260604160422/20260604160422_Services_/SYSTEM.csv 2>/dev/null,./logs/20260604T161903Z_3631_stdout.log,./logs/20260604T161903Z_3631_stderr.log,1,services search keylogger
+2026-06-04T16:19:23Z,/home/sansforensics/Desktop/cases/Test1,bash -o pipefail -lc grep -i 'perfmon' /cases/Test1/analysis/recmd/20260604160422/20260604160422_Services_/SYSTEM.csv | head -10,./logs/20260604T161923Z_6597_stdout.log,./logs/20260604T161923Z_6597_stderr.log,1,Services with perfmon
+2026-06-04T16:19:37Z,/home/sansforensics/Desktop/cases/Test1,bash -o pipefail -lc grep -i 'perfmon-k' /cases/Test1/analysis/recmd/20260604160422/20260604160422_TaskCache_/SOFTWARE.csv 2>&1 | head,./logs/20260604T161937Z_7537_stdout.log,./logs/20260604T161937Z_7537_stderr.log,1,TaskCache perfmon
+2026-06-04T16:19:48Z,/home/sansforensics/Desktop/cases/Test1,dotnet /opt/zimmermantools/RECmd/RECmd.dll -f /cases/Test1/exports/hives/SOFTWARE --kn Run --recover --csv /cases/Test1/analysis,./logs/20260604T161948Z_16736_stdout.log,./logs/20260604T161948Z_16736_stderr.log,0,RECmd Run keys
+2026-06-04T16:20:07Z,/home/sansforensics/Desktop/cases/Test1,dotnet /opt/zimmermantools/RECmd/RECmd.dll -f /cases/Test1/exports/hives/SOFTWARE --sk Run --regex --recover,./logs/20260604T162007Z_22701_stdout.log,./logs/20260604T162007Z_22701_stderr.log,0,RECmd recursive Run keys
+2026-06-04T16:20:27Z,/home/sansforensics/Desktop/cases/Test1,bash -o pipefail -lc grep -E 'Microsoft\\\\Windows\\\\CurrentVersion\\\\Run' /cases/Test1/logs/20260604T162007Z_22701_stdout.log,./logs/20260604T162027Z_18512_stdout.log,./logs/20260604T162027Z_18512_stderr.log,1,filter Run keys
+2026-06-04T16:20:31Z,/home/sansforensics/Desktop/cases/Test1,bash -o pipefail -lc grep -E 'CurrentVersion.Run' /cases/Test1/logs/20260604T162007Z_22701_stdout.log | head -20,./logs/20260604T162031Z_26531_stdout.log,./logs/20260604T162031Z_26531_stderr.log,0,filter Run paths
+2026-06-04T16:20:42Z,/home/sansforensics/Desktop/cases/Test1,dotnet /opt/zimmermantools/RECmd/RECmd.dll -f /cases/Test1/exports/hives/SOFTWARE --kn Microsoft\Windows\CurrentVersion\Run --recover --details,./logs/20260604T162042Z_30214_stdout.log,./logs/20260604T162042Z_30214_stderr.log,0,Run key values
+2026-06-04T16:20:50Z,/home/sansforensics/Desktop/cases/Test1,dotnet /opt/zimmermantools/RECmd/RECmd.dll -f /cases/Test1/exports/hives/SOFTWARE --kn WOW6432Node\Microsoft\Windows\CurrentVersion\Run --recover --details,./logs/20260604T162050Z_19896_stdout.log,./logs/20260604T162050Z_19896_stderr.log,0,Run key WOW6432
+2026-06-04T16:20:57Z,/home/sansforensics/Desktop/cases/Test1,dotnet /opt/zimmermantools/RECmd/RECmd.dll -f /cases/Test1/exports/userhives/mhill/NTUSER.DAT --kn Software\Microsoft\Windows\CurrentVersion\Run --recover --details,./logs/20260604T162057Z_16183_stdout.log,./logs/20260604T162057Z_16183_stderr.log,0,user NTUSER Run mhill
+2026-06-04T16:21:20Z,/home/sansforensics/Desktop/cases/Test1,bash -o pipefail -lc sudo ls -la /mnt/wkstn01/Windows/System32/Tasks/ 2>&1 | head -20; echo ---; sudo find /mnt/wkstn01/Windows/System32/Tasks -type f -mtime -1500 -newer /mnt/wkstn01/Windows/System32/Tasks/SA.DAT 2>/dev/null | head -30,./logs/20260604T162120Z_20097_stdout.log,./logs/20260604T162120Z_20097_stderr.log,1,system32 tasks directory listing
+2026-06-04T16:21:45Z,/home/sansforensics/Desktop/cases/Test1,bash -o pipefail -lc sudo find /mnt/wkstn01 -iname 'spsql*' 2>/dev/null | head -20,./logs/20260604T162145Z_9005_stdout.log,./logs/20260604T162145Z_9005_stderr.log,0,spsql search NTUSER profile
+2026-06-04T16:21:49Z,/home/sansforensics/Desktop/cases/Test1,bash -o pipefail -lc sudo find /mnt/wkstn01/Quarantine -mindepth 1 2>&1; echo ---; sudo find /mnt/wkstn01/ProgramData/McAfee -type d 2>&1 | head -20,./logs/20260604T162149Z_10328_stdout.log,./logs/20260604T162149Z_10328_stderr.log,0,Quarantine folder
+2026-06-04T16:21:50Z,/home/sansforensics/Desktop/cases/Test1,"bash -o pipefail -lc for u in administrator.shieldbase cbarton-a rsydow-a mhill Administrator.BASE-WKSTN-01 Public; do echo === $u; sudo ls -la ""/mnt/wkstn01/Users/$u/AppData/Roaming/Microsoft/Windows/Start Menu/Programs/Startup/"" 2>&1 | head; done",./logs/20260604T162150Z_9319_stdout.log,./logs/20260604T162150Z_9319_stderr.log,2,Startup folder mhill
+2026-06-04T16:22:14Z,/home/sansforensics/Desktop/cases/Test1,"bash -o pipefail -lc head -1 /cases/Test1/analysis/mft.csv; grep -E 'perfmon-k|rarsfx0|\\spsql\\|\\\\k\.exe,' /cases/Test1/analysis/mft.csv 2>/dev/null | head -40",./logs/20260604T162214Z_31711_stdout.log,./logs/20260604T162214Z_31711_stderr.log,0,MFT search perfmon-k k.exe rarsfx0
+2026-06-04T16:22:24Z,/home/sansforensics/Desktop/cases/Test1,"bash -o pipefail -lc grep -E ',ProgramData..perfmon-k,' /cases/Test1/analysis/mft.csv 2>/dev/null | awk -F',' '{print $1,$2,$3,$4,$5,$6,$7,$20,$22,$24}' | head -40",./logs/20260604T162224Z_18405_stdout.log,./logs/20260604T162224Z_18405_stderr.log,1,MFT perfmon-k dir all files
+2026-06-04T16:22:30Z,/home/sansforensics/Desktop/cases/Test1,bash -o pipefail -lc grep 'perfmon-k' /cases/Test1/analysis/mft.csv 2>/dev/null | head -40,./logs/20260604T162230Z_2864_stdout.log,./logs/20260604T162230Z_2864_stderr.log,0,MFT perfmon-k files
+2026-06-04T16:22:46Z,/home/sansforensics/Desktop/cases/Test1,"bash -o pipefail -lc awk -F',' 'NR==1{print} $4==""148032""' /cases/Test1/analysis/mft.csv 2>/dev/null | head -20",./logs/20260604T162246Z_29005_stdout.log,./logs/20260604T162246Z_29005_stderr.log,0,MFT files in perfmon-k parent dir 148032
+2026-06-04T16:22:48Z,/home/sansforensics/Desktop/cases/Test1,"bash -o pipefail -lc awk -F',' 'NR==1; index($6,""perfmon-k"")' /cases/Test1/analysis/mft.csv 2>/dev/null | head -40",./logs/20260604T162248Z_15505_stdout.log,./logs/20260604T162248Z_15505_stderr.log,0,MFT perfmon-k folder by ParentPath
+2026-06-04T16:23:23Z,/home/sansforensics/Desktop/cases/Test1,bash -o pipefail -lc head -1 /cases/Test1/analysis/usnjrnl.csv; grep -E 'spsql' /cases/Test1/analysis/usnjrnl.csv 2>/dev/null | head -50,./logs/20260604T162323Z_25435_stdout.log,./logs/20260604T162323Z_25435_stderr.log,1,UsnJrnl spsql events
+2026-06-04T16:23:35Z,/home/sansforensics/Desktop/cases/Test1,bash -o pipefail -lc grep -i 'spsql' /cases/Test1/analysis/usnjrnl.csv 2>/dev/null | head -10; echo '==='; grep -i 'perfmon-k\|rarsfx0' /cases/Test1/analysis/usnjrnl.csv 2>/dev/null | head -20,./logs/20260604T162335Z_28318_stdout.log,./logs/20260604T162335Z_28318_stderr.log,1,UsnJrnl spsql/perfmon
+2026-06-04T16:23:48Z,/home/sansforensics/Desktop/cases/Test1,bash -o pipefail -lc sudo strings -el /mnt/wkstn01/ProgramData/perfmon-k/pkl.bin 2>/dev/null | head -30; echo ASCII:; sudo strings -a /mnt/wkstn01/ProgramData/perfmon-k/pkl.bin 2>/dev/null | head -40,./logs/20260604T162348Z_15112_stdout.log,./logs/20260604T162348Z_15112_stderr.log,0,strings of pkl.bin
+2026-06-04T16:23:50Z,/home/sansforensics/Desktop/cases/Test1,bash -o pipefail -lc sudo strings -a /mnt/wkstn01/ProgramData/perfmon-k/perfmon-kr.exe 2>/dev/null | grep -Ei 'BlazingTools|Perfect Keylogger|keylog|PKL|hook|smtp|ftp|http' | sort -u | head -30,./logs/20260604T162350Z_26287_stdout.log,./logs/20260604T162350Z_26287_stderr.log,1,strings of perfmon-kr.exe
+2026-06-04T16:23:57Z,/home/sansforensics/Desktop/cases/Test1,bash -o pipefail -lc sudo strings -a /mnt/wkstn01/ProgramData/perfmon-k/perfmon-kr.exe 2>/dev/null | grep -Ei 'blazingtools|perfect keylogger|keylog|pkl|hook|smtp|ftp upload|http upload' | sort -u | head -20,./logs/20260604T162357Z_5861_stdout.log,./logs/20260604T162357Z_5861_stderr.log,1,perfmon-kr strings
+2026-06-04T16:24:11Z,/home/sansforensics/Desktop/cases/Test1,bash -o pipefail -lc sudo strings /mnt/wkstn01/ProgramData/perfmon-k/perfmon-kr.exe 2>/dev/null | grep -iE 'blazingtools|keylog|perfect' | head -20,./logs/20260604T162411Z_15046_stdout.log,./logs/20260604T162411Z_15046_stderr.log,1,strings raw of perfmon-kr
+2026-06-04T16:24:17Z,/home/sansforensics/Desktop/cases/Test1,sudo strings /mnt/wkstn01/ProgramData/perfmon-k/perfmon-kr.exe,./logs/20260604T162417Z_29119_stdout.log,./logs/20260604T162417Z_29119_stderr.log,0,strings raw direct
+2026-06-04T16:24:24Z,/home/sansforensics/Desktop/cases/Test1,bash -o pipefail -lc grep -iE 'blazingtools|keylog|perfect.*key|pkl' /cases/Test1/logs/20260604T162417Z_29119_stdout.log | sort -u | head -30,./logs/20260604T162424Z_8342_stdout.log,./logs/20260604T162424Z_8342_stderr.log,1,grep keylogger from strings file
+2026-06-04T16:24:28Z,/home/sansforensics/Desktop/cases/Test1,bash -o pipefail -lc wc -l /cases/Test1/logs/20260604T162417Z_29119_stdout.log /cases/Test1/logs/20260604T162417Z_29119_stderr.log,./logs/20260604T162428Z_22931_stdout.log,./logs/20260604T162428Z_22931_stderr.log,0,wc strings out
+2026-06-04T16:24:38Z,/home/sansforensics/Desktop/cases/Test1,bash -o pipefail -lc awk 'tolower($0) ~ /blazing|keylog|perfect|kpkl|kpl\.|pkl|hook/' /cases/Test1/logs/20260604T162417Z_29119_stdout.log | sort -u | head -40,./logs/20260604T162438Z_17075_stdout.log,./logs/20260604T162438Z_17075_stderr.log,0,filter strings raw
+2026-06-04T16:25:05Z,/home/sansforensics/Desktop/cases/Test1,"bash -o pipefail -lc python3 -c ""
+import csv
+for r in csv.DictReader(open('/cases/Test1/analysis/evtx_application.csv', encoding='utf-8', errors='replace')):
+    t=r['TimeCreated']
+    if t.startswith('2018-08-31 21:3') or t.startswith('2018-08-31 21:4'):
+        print('|'.join([t,r['EventId'],r['Provider'][:30],(r.get('PayloadData1','') or '')[:150],(r.get('PayloadData2','') or '')[:80]]))
+"" | head -100",./logs/20260604T162505Z_17974_stdout.log,./logs/20260604T162505Z_17974_stderr.log,0,App.evtx around install
+2026-06-04T16:25:06Z,/home/sansforensics/Desktop/cases/Test1,bash -o pipefail -lc mkdir -p /cases/Test1/analysis/yara,./logs/20260604T162506Z_8932_stdout.log,./logs/20260604T162506Z_8932_stderr.log,0,yara write keylogger rule
+2026-06-04T16:25:23Z,/home/sansforensics/Desktop/cases/Test1,bash -o pipefail -lc sudo /usr/local/bin/yara -r /cases/Test1/analysis/yara/blazingtools_pkl.yar /mnt/wkstn01/ProgramData/perfmon-k/ 2>&1,./logs/20260604T162523Z_16978_stdout.log,./logs/20260604T162523Z_16978_stderr.log,1,yara test on perfmon-k dir
+2026-06-04T16:25:33Z,/home/sansforensics/Desktop/cases/Test1,bash -o pipefail -lc which yara; ls /usr/bin/yara* /usr/local/bin/yara* 2>/dev/null,./logs/20260604T162533Z_28498_stdout.log,./logs/20260604T162533Z_28498_stderr.log,2,find yara
+2026-06-04T16:25:37Z,/home/sansforensics/Desktop/cases/Test1,bash -o pipefail -lc which yara 2>&1 ; locate yara 2>&1 | head -10,./logs/20260604T162537Z_27939_stdout.log,./logs/20260604T162537Z_27939_stderr.log,127,find yara binary
+2026-06-04T16:25:46Z,/home/sansforensics/Desktop/cases/Test1,python3 -c import yara; print(yara.__version__),./logs/20260604T162546Z_26278_stdout.log,./logs/20260604T162546Z_26278_stderr.log,0,yara via python
+2026-06-04T16:25:46Z,/home/sansforensics/Desktop/cases/Test1,bash -o pipefail -lc find / -name yara -type f -executable 2>/dev/null | head -10,./logs/20260604T162546Z_24129_stdout.log,./logs/20260604T162546Z_24129_stderr.log,1,search yara binary widely
+2026-06-04T16:26:23Z,/home/sansforensics/Desktop/cases/Test1,sudo python3 /cases/Test1/analysis/scripts/yara_sweep.py /mnt/wkstn01/ProgramData/perfmon-k,./logs/20260604T162623Z_29085_stdout.log,./logs/20260604T162623Z_29085_stderr.log,0,yara python on perfmon-k
+2026-06-04T16:26:47Z,/home/sansforensics/Desktop/cases/Test1,bash -o pipefail -lc sudo find /mnt/wkstn01/Windows/System32/wbem/Repository -maxdepth 1 -type f 2>&1 | head,./logs/20260604T162647Z_19217_stdout.log,./logs/20260604T162647Z_19217_stderr.log,0,WMI subscription persistence
+2026-06-04T16:26:49Z,/home/sansforensics/Desktop/cases/Test1,bash -o pipefail -lc sudo find /mnt/wkstn01/Users -type f -name 'History' -o -name 'WebCacheV01.dat' 2>/dev/null | head -10,./logs/20260604T162649Z_9132_stdout.log,./logs/20260604T162649Z_9132_stderr.log,0,Edge browser data
+2026-06-04T16:27:34Z,/home/sansforensics/Desktop/cases/Test1,bash -o pipefail -lc grep -i 'spsql' /cases/Test1/analysis/amcache_*.csv 2>/dev/null | head -20,./logs/20260604T162734Z_31184_stdout.log,./logs/20260604T162734Z_31184_stderr.log,0,summarize amcache spsql traces
+2026-06-04T16:28:06Z,/home/sansforensics/Desktop/cases/Test1,bash -o pipefail -lc ls -la /home/sansforensics/.claude/scripts/generate_pdf_report.py /home/sansforensics/.claude/scripts/pdf_visual_check.py /home/sansforensics/.claude/scripts/audit_command_ledger.py 2>&1,./logs/20260604T162806Z_23001_stdout.log,./logs/20260604T162806Z_23001_stderr.log,2,find pdf script
+2026-06-04T16:28:17Z,/home/sansforensics/Desktop/cases/Test1,bash -o pipefail -lc find /home/sansforensics/.claude -name 'generate_pdf_report*' 2>/dev/null; find /cases/Test1 -name 'generate_pdf*' 2>/dev/null,./logs/20260604T162817Z_19283_stdout.log,./logs/20260604T162817Z_19283_stderr.log,0,find pdf generator
+2026-06-04T16:34:37Z,/home/sansforensics/Desktop/cases/Test1,python3 /home/sansforensics/.claude/scripts/audit_command_ledger.py,./logs/20260604T163437Z_31489_stdout.log,./logs/20260604T163437Z_31489_stderr.log,0,audit command ledger
+2026-06-04T16:50:16Z,/home/sansforensics/Desktop/cases/Test1,python3 /cases/Test1/analysis/scripts/build_pdf_report.py,./logs/20260604T165016Z_8878_stdout.log,./logs/20260604T165016Z_8878_stderr.log,0,build pdf report
+2026-06-04T16:50:53Z,/home/sansforensics/Desktop/cases/Test1,python3 /home/sansforensics/.claude/scripts/pdf_visual_check.py /cases/Test1/reports/base-wkstn-01-c-drive-report.pdf,./logs/20260604T165053Z_15514_stdout.log,./logs/20260604T165053Z_15514_stderr.log,1,pdf visual check
+2026-06-04T16:51:37Z,/home/sansforensics/Desktop/cases/Test1,pip3 install --break-system-packages PyMuPDF,./logs/20260604T165137Z_10207_stdout.log,./logs/20260604T165137Z_10207_stderr.log,0,install pymupdf
+2026-06-04T16:51:51Z,/home/sansforensics/Desktop/cases/Test1,python3 /home/sansforensics/.claude/scripts/pdf_visual_check.py /cases/Test1/reports/base-wkstn-01-c-drive-report.pdf,./logs/20260604T165151Z_22840_stdout.log,./logs/20260604T165151Z_22840_stderr.log,1,pdf visual check retry
+2026-06-04T16:52:18Z,/home/sansforensics/Desktop/cases/Test1,python3 /home/sansforensics/.claude/scripts/pdf_visual_check.py /cases/Test1/reports/base-wkstn-01-c-drive-report.pdf --margin 10,./logs/20260604T165218Z_523_stdout.log,./logs/20260604T165218Z_523_stderr.log,0,pdf visual check with margin
+2026-06-04T16:52:53Z,/home/sansforensics/Desktop/cases/Test1,python3 /cases/Test1/analysis/scripts/build_pdf_report.py,./logs/20260604T165253Z_8750_stdout.log,./logs/20260604T165253Z_8750_stderr.log,0,rebuild pdf
+2026-06-04T16:53:01Z,/home/sansforensics/Desktop/cases/Test1,python3 /home/sansforensics/.claude/scripts/pdf_visual_check.py /cases/Test1/reports/base-wkstn-01-c-drive-report.pdf,./logs/20260604T165301Z_4516_stdout.log,./logs/20260604T165301Z_4516_stderr.log,1,pdf visual check final
+2026-06-04T16:53:44Z,/home/sansforensics/Desktop/cases/Test1,python3 /cases/Test1/analysis/scripts/build_pdf_report.py,./logs/20260604T165344Z_2792_stdout.log,./logs/20260604T165344Z_2792_stderr.log,0,rebuild pdf v2
+2026-06-04T16:53:52Z,/home/sansforensics/Desktop/cases/Test1,python3 /home/sansforensics/.claude/scripts/pdf_visual_check.py /cases/Test1/reports/base-wkstn-01-c-drive-report.pdf,./logs/20260604T165352Z_15834_stdout.log,./logs/20260604T165352Z_15834_stderr.log,1,pdf visual check v2
+2026-06-04T16:54:19Z,/home/sansforensics/Desktop/cases/Test1,"python3 -c 
+import sys
+sys.path.insert(0, '/home/sansforensics/.claude/analysis-scripts')
+import generate_pdf_report as gpr
+orig = gpr.CSS_STYLE
+gpr.CSS_STYLE = gpr.CSS_STYLE.replace('margin-bottom: 0.6cm;', 'margin-bottom: 1.2cm;')
+print('Replaced?', '1.2cm' in gpr.CSS_STYLE)
+print('Occurrences of 0.6cm:', gpr.CSS_STYLE.count('0.6cm'))
+print('Occurrences of 1.2cm:', gpr.CSS_STYLE.count('1.2cm'))
+",./logs/20260604T165419Z_9413_stdout.log,./logs/20260604T165419Z_9413_stderr.log,0,verify css replace
+2026-06-04T16:54:34Z,/home/sansforensics/Desktop/cases/Test1,"python3 -c 
+import fitz
+doc = fitz.open('/cases/Test1/reports/base-wkstn-01-c-drive-report.pdf')
+page = doc[1]
+print('Page rect:', page.rect)
+text = page.get_text('dict')
+for block in text.get('blocks', []):
+    bbox = block.get('bbox')
+    if bbox and bbox[3] > 800:
+        print('BBOX:', bbox)
+        for line in block.get('lines', []):
+            for span in line.get('spans', []):
+                print('  span:', span.get('size'), repr(span.get('text','')[:80]))
+",./logs/20260604T165434Z_21832_stdout.log,./logs/20260604T165434Z_21832_stderr.log,0,inspect pdf page bounds
+2026-06-04T16:55:13Z,/home/sansforensics/Desktop/cases/Test1,python3 /cases/Test1/analysis/scripts/build_pdf_report.py,./logs/20260604T165513Z_25601_stdout.log,./logs/20260604T165513Z_25601_stderr.log,0,rebuild pdf v3
+2026-06-04T16:55:17Z,/home/sansforensics/Desktop/cases/Test1,python3 /home/sansforensics/.claude/scripts/pdf_visual_check.py /cases/Test1/reports/base-wkstn-01-c-drive-report.pdf,./logs/20260604T165517Z_23898_stdout.log,./logs/20260604T165517Z_23898_stderr.log,0,pdf visual check v3
+2026-06-04T16:55:28Z,/home/sansforensics/Desktop/cases/Test1,python3 /home/sansforensics/.claude/scripts/audit_command_ledger.py,./logs/20260604T165528Z_7670_stdout.log,./logs/20260604T165528Z_7670_stderr.log,0,final ledger audit
+2026-06-04T16:55:29Z,/home/sansforensics/Desktop/cases/Test1,bash -o pipefail -lc ls -la /cases/Test1/reports/ /cases/Test1/analysis/*.csv /cases/Test1/exports/yara_hits.csv,./logs/20260604T165529Z_16753_stdout.log,./logs/20260604T165529Z_16753_stderr.log,0,list final artifacts
+2026-06-04T16:55:47Z,/home/sansforensics/Desktop/cases/Test1,"bash -o pipefail -lc python3 -c ""
+import os, hashlib, csv, datetime
+roots=['/cases/Test1/reports','/cases/Test1/analysis','/cases/Test1/exports','/cases/Test1/logs']
+rows=[]
+for root in roots:
+    for dp,_,files in os.walk(root):
+        for f in files:
+            p=os.path.join(dp,f)
+            try:
+                st=os.stat(p)
+                h=hashlib.sha256()
+                with open(p,'rb') as fh:
+                    for chunk in iter(lambda: fh.read(1<<20), b''): h.update(chunk)
+                rows.append([p,'File',str(st.st_size),h.hexdigest(),datetime.datetime.utcfromtimestamp(st.st_ctime).strftime('%Y-%m-%dT%H:%M:%SZ'),'Output artefact'])
+            except Exception as e:
+                pass
+with open('/cases/Test1/reports/artifact_manifest.csv','w',newline='') as f:
+    w=csv.writer(f); w.writerow(['Path','Type','Size Bytes','SHA256','Created UTC','Purpose']); w.writerows(rows)
+print('Manifest rows:',len(rows))
+""",./logs/20260604T165547Z_14183_stdout.log,./logs/20260604T165547Z_14183_stderr.log,0,build artifact manifest
