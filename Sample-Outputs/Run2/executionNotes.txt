@@ -1,0 +1,15 @@
+sudo mkdir -p /mnt/ewf_wkstn01 /mnt/wkstn01
+
+sudo ewfmount base-wkstn-01-c-drive.E01 /mnt/ewf_wkstn01
+
+OFFSET=$(sudo mmls /mnt/ewf_wkstn01/ewf1 | awk '/NTFS/{print $3; exit}')
+
+sudo mount -o ro,loop,noatime,offset=$((OFFSET*512)) /mnt/ewf_wkstn01/ewf1 /mnt/wkstn01
+
+claude
+
+/login
+
+find evil in base-wkstn-01-c-drive.E01 and write a report in PDF
+
+finished in ~35 min and used ~113k tokens ($20)
