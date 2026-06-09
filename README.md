@@ -5,7 +5,9 @@
 ### Step 1 (installation):
 
     - Install Protocol SIFT VM
-    - Install all files and directories from 'Claude Directory' into your root .claude directory
+    - Install all files and directories from 'Claude Directory' into your root .claude directory (this can be automated by using install.sh
+        - Usage: curl -fsSL https://raw.githubusercontent.com/bscsanschang/SANS-AI-Hackathon/main/install.sh | bash
+        - or: bash install.sh   (from a local clone)
     - Install all files from 'Case Directory' into your case directory
     - Add your API key to Claude or login with web auth
 
