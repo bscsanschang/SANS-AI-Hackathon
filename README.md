@@ -35,4 +35,19 @@
     - Enter command such as:
       find evil in {evidenceFile} and write a PDF report
 
+## Architecture
+
+### SIFT Workstation
+<img width="944" height="958" alt="SIFT_Workstation" src="https://github.com/user-attachments/assets/e93d1e77-aae1-49c9-bd7e-bf20c0f73a4f" />
+
+### Report Pipeline
+<img width="967" height="374" alt="Output pipeline" src="https://github.com/user-attachments/assets/080033c5-771f-4a5c-8f0b-d08a63b5bea9" />
+
+### Evidence Integrity
+The agent is given read-only access to the mounted evidence source. Generated files are directed to separate output locations for analysis artifacts, exports, logs, and reports. The workflow is designed so that the original evidence image and mounted evidence filesystem are not used as working directories for generated output.
+
+In addition, every forensic command executed by the agent is required to go through a logging hook/wrapper. This command-logging mechanism records the command that was run, the working directory, timestamps, stdout/stderr locations, exit status, and related notes. This creates an audit trail showing what the agent did during the run and allows you to review whether the agent’s report claims are supported by actual commands.
+
+
+
     
