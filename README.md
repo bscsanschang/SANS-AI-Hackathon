@@ -1,7 +1,7 @@
 # Ledger
 
 ## What is it
-Protocol SIFT implementation with full audit log traceability, reduced hallucinations, and improved consistency.
+Ledger extends the Protocol SIFT AI agent with command-ledger auditing, evidence-linked claim validation, and read-only evidence handling to improve traceability, reduce hallucination risk, and increase consistency in automated DFIR workflows.
 
 ## Instructions
 
