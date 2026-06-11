@@ -1,4 +1,7 @@
-# SANS-AI-Hackathon
+# Ledger
+
+## What is it
+Protocol SIFT implementation with full audit log traceability, reduced hallucinations, and improved consistency.
 
 ## Instructions
 
