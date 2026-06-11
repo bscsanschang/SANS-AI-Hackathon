@@ -1,4 +1,5 @@
 # Ledger
+<img width="1536" height="1024" alt="Ledger" src="https://github.com/user-attachments/assets/81e7aad2-3124-401f-b819-fa09e922cc11" />
 
 ## What is it
 Ledger extends the Protocol SIFT AI agent with command-ledger auditing, evidence-linked claim validation, and read-only evidence handling to improve traceability, reduce hallucination risk, and increase consistency in automated DFIR workflows.
